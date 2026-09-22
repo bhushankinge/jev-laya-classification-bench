@@ -1,0 +1,2919 @@
+{
+  "vehicles": {
+    "SEWP": {
+      "labeled": 5975,
+      "sample_requested": 6000,
+      "components_per_opp": [
+        {
+          "value": 1,
+          "count": 4067,
+          "percent": 68.1
+        },
+        {
+          "value": 2,
+          "count": 1154,
+          "percent": 19.3
+        },
+        {
+          "value": 3,
+          "count": 272,
+          "percent": 4.6
+        },
+        {
+          "value": 6,
+          "count": 260,
+          "percent": 4.4
+        },
+        {
+          "value": 4,
+          "count": 139,
+          "percent": 2.3
+        },
+        {
+          "value": 5,
+          "count": 83,
+          "percent": 1.4
+        }
+      ],
+      "kind_incidence": [
+        {
+          "value": "physical product",
+          "count": 2520,
+          "percent": 42.2
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 1732,
+          "percent": 29.0
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 1143,
+          "percent": 19.1
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 885,
+          "percent": 14.8
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 215,
+          "percent": 3.6
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 126,
+          "percent": 2.1
+        },
+        {
+          "value": "warranty/extended warranty",
+          "count": 92,
+          "percent": 1.5
+        },
+        {
+          "value": "installation/integration service",
+          "count": 90,
+          "percent": 1.5
+        },
+        {
+          "value": "other",
+          "count": 76,
+          "percent": 1.3
+        },
+        {
+          "value": "training",
+          "count": 55,
+          "percent": 0.9
+        },
+        {
+          "value": "cloud/hosting service",
+          "count": 53,
+          "percent": 0.9
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 18,
+          "percent": 0.3
+        }
+      ],
+      "kind_primary": [
+        {
+          "value": "physical product",
+          "count": 2467,
+          "percent": 41.3
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 1679,
+          "percent": 28.1
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 760,
+          "percent": 12.7
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 720,
+          "percent": 12.1
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 94,
+          "percent": 1.6
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 90,
+          "percent": 1.5
+        },
+        {
+          "value": "other",
+          "count": 64,
+          "percent": 1.1
+        },
+        {
+          "value": "cloud/hosting service",
+          "count": 33,
+          "percent": 0.6
+        },
+        {
+          "value": "warranty/extended warranty",
+          "count": 21,
+          "percent": 0.4
+        },
+        {
+          "value": "training",
+          "count": 17,
+          "percent": 0.3
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 16,
+          "percent": 0.3
+        },
+        {
+          "value": "installation/integration service",
+          "count": 14,
+          "percent": 0.2
+        }
+      ],
+      "kind_combinations_top15": [
+        {
+          "value": "physical product",
+          "count": 2066,
+          "percent": 34.6
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 1507,
+          "percent": 25.2
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 713,
+          "percent": 11.9
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 587,
+          "percent": 9.8
+        },
+        {
+          "value": "physical product + support/maintenance contract",
+          "count": 104,
+          "percent": 1.7
+        },
+        {
+          "value": "software subscription/SaaS + support/maintenance contract",
+          "count": 93,
+          "percent": 1.6
+        },
+        {
+          "value": "software license (perpetual) + support/maintenance contract",
+          "count": 90,
+          "percent": 1.5
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 84,
+          "percent": 1.4
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 80,
+          "percent": 1.3
+        },
+        {
+          "value": "other",
+          "count": 63,
+          "percent": 1.1
+        },
+        {
+          "value": "physical product + software license (perpetual)",
+          "count": 63,
+          "percent": 1.1
+        },
+        {
+          "value": "physical product + warranty/extended warranty",
+          "count": 39,
+          "percent": 0.7
+        },
+        {
+          "value": "installation/integration service + physical product",
+          "count": 33,
+          "percent": 0.6
+        },
+        {
+          "value": "physical product + software license (perpetual) + support/maintenance contract",
+          "count": 33,
+          "percent": 0.6
+        },
+        {
+          "value": "consumables/supplies + physical product",
+          "count": 28,
+          "percent": 0.5
+        }
+      ],
+      "top_level_incidence": [
+        {
+          "value": "Software",
+          "count": 2615,
+          "percent": 43.8
+        },
+        {
+          "value": "Hardware",
+          "count": 2610,
+          "percent": 43.7
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 1222,
+          "percent": 20.5
+        },
+        {
+          "value": "Services",
+          "count": 252,
+          "percent": 4.2
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 90,
+          "percent": 1.5
+        },
+        {
+          "value": "Other",
+          "count": 76,
+          "percent": 1.3
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 18,
+          "percent": 0.3
+        }
+      ],
+      "top_level_primary": [
+        {
+          "value": "Hardware",
+          "count": 2557,
+          "percent": 42.8
+        },
+        {
+          "value": "Software",
+          "count": 2432,
+          "percent": 40.7
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 781,
+          "percent": 13.1
+        },
+        {
+          "value": "Services",
+          "count": 111,
+          "percent": 1.9
+        },
+        {
+          "value": "Other",
+          "count": 64,
+          "percent": 1.1
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 16,
+          "percent": 0.3
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 14,
+          "percent": 0.2
+        }
+      ],
+      "top_level_combinations": [
+        {
+          "value": "Hardware",
+          "count": 2178,
+          "percent": 36.5
+        },
+        {
+          "value": "Software",
+          "count": 2151,
+          "percent": 36.0
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 737,
+          "percent": 12.3
+        },
+        {
+          "value": "Maintenance & Support + Software",
+          "count": 195,
+          "percent": 3.3
+        },
+        {
+          "value": "Hardware + Maintenance & Support",
+          "count": 150,
+          "percent": 2.5
+        },
+        {
+          "value": "Services",
+          "count": 99,
+          "percent": 1.7
+        },
+        {
+          "value": "Hardware + Software",
+          "count": 90,
+          "percent": 1.5
+        },
+        {
+          "value": "Other",
+          "count": 63,
+          "percent": 1.1
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Software",
+          "count": 57,
+          "percent": 1.0
+        },
+        {
+          "value": "Services + Software",
+          "count": 50,
+          "percent": 0.8
+        },
+        {
+          "value": "Hardware + Installation & Integration",
+          "count": 34,
+          "percent": 0.6
+        },
+        {
+          "value": "Hardware + Services",
+          "count": 24,
+          "percent": 0.4
+        },
+        {
+          "value": "Maintenance & Support + Services + Software",
+          "count": 19,
+          "percent": 0.3
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 14,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Services + Software",
+          "count": 13,
+          "percent": 0.2
+        },
+        {
+          "value": "Maintenance & Support + Services",
+          "count": 11,
+          "percent": 0.2
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 10,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Software",
+          "count": 10,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support",
+          "count": 10,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Services + Software",
+          "count": 9,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Services",
+          "count": 8,
+          "percent": 0.1
+        },
+        {
+          "value": "Installation & Integration + Maintenance & Support + Services + Software",
+          "count": 6,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Services",
+          "count": 6,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Other",
+          "count": 6,
+          "percent": 0.1
+        },
+        {
+          "value": "Furniture / Facilities + Hardware",
+          "count": 4,
+          "percent": 0.1
+        },
+        {
+          "value": "Other + Software",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Software",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "Installation & Integration + Maintenance & Support + Software",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Services",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "Installation & Integration + Software",
+          "count": 2,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Other + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Other + Services",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Installation & Integration + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Other",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Maintenance & Support + Other",
+          "count": 1,
+          "percent": 0.0
+        }
+      ],
+      "lifecycle_primary": [
+        {
+          "value": "new purchase",
+          "count": 4526,
+          "percent": 75.7
+        },
+        {
+          "value": "renewal",
+          "count": 1449,
+          "percent": 24.3
+        }
+      ],
+      "lifecycle_by_kind": {
+        "software license (perpetual)": [
+          {
+            "value": "new purchase",
+            "count": 1124,
+            "percent": 93.7
+          },
+          {
+            "value": "renewal",
+            "count": 76,
+            "percent": 6.3
+          }
+        ],
+        "physical product": [
+          {
+            "value": "new purchase",
+            "count": 3822,
+            "percent": 99.9
+          },
+          {
+            "value": "renewal",
+            "count": 4,
+            "percent": 0.1
+          }
+        ],
+        "support/maintenance contract": [
+          {
+            "value": "renewal",
+            "count": 741,
+            "percent": 51.9
+          },
+          {
+            "value": "new purchase",
+            "count": 688,
+            "percent": 48.1
+          }
+        ],
+        "software subscription/SaaS": [
+          {
+            "value": "renewal",
+            "count": 1281,
+            "percent": 52.3
+          },
+          {
+            "value": "new purchase",
+            "count": 1166,
+            "percent": 47.7
+          }
+        ],
+        "other": [
+          {
+            "value": "new purchase",
+            "count": 74,
+            "percent": 93.7
+          },
+          {
+            "value": "renewal",
+            "count": 5,
+            "percent": 6.3
+          }
+        ],
+        "installation/integration service": [
+          {
+            "value": "new purchase",
+            "count": 90,
+            "percent": 100.0
+          }
+        ],
+        "professional/consulting service": [
+          {
+            "value": "new purchase",
+            "count": 245,
+            "percent": 98.0
+          },
+          {
+            "value": "renewal",
+            "count": 5,
+            "percent": 2.0
+          }
+        ],
+        "warranty/extended warranty": [
+          {
+            "value": "new purchase",
+            "count": 80,
+            "percent": 81.6
+          },
+          {
+            "value": "renewal",
+            "count": 18,
+            "percent": 18.4
+          }
+        ],
+        "consumables/supplies": [
+          {
+            "value": "new purchase",
+            "count": 164,
+            "percent": 100.0
+          }
+        ],
+        "cloud/hosting service": [
+          {
+            "value": "new purchase",
+            "count": 49,
+            "percent": 81.7
+          },
+          {
+            "value": "renewal",
+            "count": 11,
+            "percent": 18.3
+          }
+        ],
+        "training": [
+          {
+            "value": "new purchase",
+            "count": 60,
+            "percent": 100.0
+          }
+        ],
+        "furniture/facilities": [
+          {
+            "value": "new purchase",
+            "count": 19,
+            "percent": 100.0
+          }
+        ]
+      },
+      "domain_primary": [
+        {
+          "value": "business/productivity software",
+          "count": 1198,
+          "percent": 20.1
+        },
+        {
+          "value": "infrastructure/platform software",
+          "count": 907,
+          "percent": 15.2
+        },
+        {
+          "value": "cybersecurity",
+          "count": 771,
+          "percent": 12.9
+        },
+        {
+          "value": "other",
+          "count": 663,
+          "percent": 11.1
+        },
+        {
+          "value": "end-user devices",
+          "count": 549,
+          "percent": 9.2
+        },
+        {
+          "value": "networking",
+          "count": 502,
+          "percent": 8.4
+        },
+        {
+          "value": "storage/backup",
+          "count": 269,
+          "percent": 4.5
+        },
+        {
+          "value": "cables/accessories/peripherals",
+          "count": 266,
+          "percent": 4.5
+        },
+        {
+          "value": "compute/servers",
+          "count": 243,
+          "percent": 4.1
+        },
+        {
+          "value": "audio-visual",
+          "count": 205,
+          "percent": 3.4
+        },
+        {
+          "value": "telecom/mobility",
+          "count": 150,
+          "percent": 2.5
+        },
+        {
+          "value": "data center/power/cooling",
+          "count": 108,
+          "percent": 1.8
+        },
+        {
+          "value": "printing/imaging",
+          "count": 92,
+          "percent": 1.5
+        },
+        {
+          "value": "lab/scientific/medical",
+          "count": 38,
+          "percent": 0.6
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 14,
+          "percent": 0.2
+        }
+      ],
+      "brand_name_only_percent": 48.5,
+      "rfi_percent": 2.9,
+      "attachment_only_percent": 0.9,
+      "multi_component_percent": 31.9,
+      "confidence": [
+        {
+          "value": "high",
+          "count": 5813,
+          "percent": 97.3
+        },
+        {
+          "value": "low",
+          "count": 157,
+          "percent": 2.6
+        },
+        {
+          "value": "medium",
+          "count": 5,
+          "percent": 0.1
+        }
+      ],
+      "other_whats_top30": [
+        {
+          "value": "it equipment and services",
+          "count": 12,
+          "percent": 15.2
+        },
+        {
+          "value": "it products and services",
+          "count": 11,
+          "percent": 13.9
+        },
+        {
+          "value": "vswir camera and software",
+          "count": 4,
+          "percent": 5.1
+        },
+        {
+          "value": "conference room equipment",
+          "count": 2,
+          "percent": 2.5
+        },
+        {
+          "value": "f5 networks products and services",
+          "count": 2,
+          "percent": 2.5
+        },
+        {
+          "value": "networking infrastructure and services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "thales software and hardware",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "sewp testing services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "san universal voucher",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "propane gas services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "broadcom products",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "items from bom",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "dam automation supplies",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "data services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "mfgs inc renewal",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "transaction fees",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "f5 networks software and services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "infrastructure materials",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "misc office items",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "cybersecurity items",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "materials",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "mobile situational awareness toolkit",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "vpat documentation",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "storage systems and support",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "cohesity software and hardware",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "cisco gemms quote",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "maintenance vector cast products",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "freight/transport",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "products",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "isg product",
+          "count": 1,
+          "percent": 1.3
+        }
+      ],
+      "unusual_count": 342,
+      "unusual_sample": [
+        "The solicitation is an RFI (Request for Information) for market research, not a binding procurement solicitation (RFQ/RF",
+        "The solicitation is an RFI (Request for Information) rather than a formal RFQ for purchase, and the specific products to",
+        "The solicitation is an RFI (Request for Information) rather than a formal RFQ, and the specific product list is in an un",
+        "The solicitation title explicitly names 'Thales' as the brand, but the text does not contain a 'no substitutes' clause, ",
+        "The solicitation references an attached file for the specific product list but does not describe the items in the text. ",
+        "The solicitation is explicitly a test RFI with no actual goods or services to procure, other than the testing of the SEW",
+        "The solicitation text contains a typo or non-standard phrasing ('Oy's') which likely refers to 'Option Years' (OY) for a",
+        "The solicitation explicitly references an external Excel file for item details and mandates 'No substitutions', which is",
+        "Market Research Request (MRR) explicitly states no commitment to award or pay for information submitted.",
+        "The solicitation title 'IT CONSOLIDATED BUY' and the description 'See attached' indicate a broad, multi-item procurement",
+        "Specific aircraft (C-130) integration requirement",
+        "The solicitation is explicitly for 'MARKET RESEARCH PURPOSES ONLY' and does not represent a firm purchase order, though ",
+        "The item is a 'voucher' for a SAN (Storage Area Network) renewal, which is a non-standard procurement item type not well",
+        "Service-based procurement for a consumable fuel (propane) rather than a physical product or standard IT service.",
+        "Requirement for TEMPEST (sensitive compartmented information facility) certified equipment which is a specialized subset",
+        "The description is extremely brief and does not specify quantities, specific models, or whether the software is a new or",
+        "The second component 'time server accessories' is a placeholder because the specific part numbers (1204-27, CA069-1413-0",
+        "The term 'Optic Fiber' in the title likely refers to a specific IXIA product line (e.g., IXIA Optic Fiber Testers or a '",
+        "The solicitation explicitly states 'Please see attached BOM' but the BOM content is not provided in the text, making it ",
+        "The solicitation text is extremely vague, referring only to 'Broadcom' and a discount request without specifying the IT,",
+        "The solicitation text is a placeholder reference to an appendix and does not specify any distinct items, quantities, or\u54c1",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific\u8bc6\u522b",
+        "The solicitation title is 'Software' but the description is 'See attached' with no specific details on the type, brand,,",
+        "None",
+        "Solicitation is restricted to HubZone Small Businesses and a single brand (Belkin) for a 'JWICS Refresh' without listing",
+        "None",
+        "The solicitation text is a procedural request to extend a quote expiration and mentions payment methods (GPC, creditcard",
+        "The solicitation lists 'Milestone Systems' as a provider for products, but Milestone is primarily a software vendor (VMS",
+        "Specific product list is in an attached file not provided in the text.",
+        "Market research solicitation (MRR) with no guarantee of award",
+        "None",
+        "The solicitation title 'Rustici Renewal' suggests a renewal, but the provided text contains no specific details about a ",
+        "The solicitation references 'attached SKUs' and 'Draft I-BOM specifications' which are not provided in the text, making ",
+        "The document is explicitly labeled as a Request for Information (RFI) and states 'NO SOLICITATION IS AVAILABLE AT THIS T",
+        "The solicitation title 'Concurrent SW renewal' and description 'Please provide a quote for the attached' do not specify:",
+        "The solicitation description is empty ('see attach file'), so the specific product details, brand, and lifecycle status,",
+        "The solicitation does not list specific items, part numbers, or quantities; it only references an attached document for.",
+        "Brand-name-only requirement for a specific chassis model (UEI PowerDNA) with no substitutes allowed; requires vendor to ",
+        "The solicitation restricts quotes to a specific list of providers (Accurate Technology Services, Cradlepoint, Cisco, Pac",
+        "Transitioning from legacy 'Premium and Physical Analyzer' to new 'Inyets' platform structure",
+        "The solicitation bundles a specialized camera (VSWIR TEC1) with software in a single line item, making it difficult to\u5206\u79bb",
+        "The solicitation references an attached file for the specific product list but does not detail the products in the text;",
+        "The solicitation explicitly states 'Brand name items are required; no substitutions are authorized' and refers to 'Lucid",
+        "The brand 'Plum Case' is ambiguous; it may refer to 'Plum Decision' (a specific software vendor) or be a typo. The text'",
+        "The solicitation text is a request to extend a quote expiration and mentions payment via GPC (Government Purchase Card);",
+        "None",
+        "The description is extremely brief ('See EL') and the RFQ type is an RFI (Request for Information), not a standard solic",
+        "The solicitation is a Request for Information (RFI) for market research, not a binding procurement for specific goods, '",
+        "The solicitation restricts procurement to a single provider (Samsung Electronics) without specifying the exact product\u54c1\u7c7b",
+        "The solicitation references a separate attachment containing specific line items but does not list them in the text; the",
+        "The text only provides the product name 'Core Impact' without quantity, term, or specific license type (perpetual vs. S)",
+        "Restricted to authorized resellers only; no credit card payments allowed",
+        "The second component's 'kind' was incorrectly set to 'cloud/hosting service' in the thought process; it should be 'cable",
+        "None",
+        "Requirement for nationwide shipping included in the BOM quote",
+        "The solicitation text is extremely vague, listing only a contract vehicle (SEWP), a title, and a request for TAA-com/Fob",
+        "Reinstatement fee requirement for hardware",
+        "The solicitation explicitly requires a credit card purchase and includes a specific EBOM (Bill of Materials) document, a",
+        "The solicitation requires 'ALL OR NONE' submission and explicitly prohibits refurbished, generic, or substitute products",
+        "The solicitation text does not specify the exact components, quantities, or whether the purchase is for software, a pre-"
+      ],
+      "legacy_comparison": {
+        "tagged_in_sample": 1816,
+        "exact set match": {
+          "count": 1270,
+          "percent": 69.9
+        },
+        "legacy \u2286 qwen": {
+          "count": 1351,
+          "percent": 74.4
+        },
+        "primary in legacy": {
+          "count": 1631,
+          "percent": 89.8
+        },
+        "software_new_vs_renewal": {
+          "legacy=software/new | qwen=new/other": 294,
+          "legacy=software/new | qwen=renewal": 7,
+          "legacy=software/renewal | qwen=new/other": 140,
+          "legacy=software/renewal | qwen=renewal": 324
+        }
+      }
+    },
+    "GSA MAS": {
+      "labeled": 2997,
+      "sample_requested": 3000,
+      "components_per_opp": [
+        {
+          "value": 1,
+          "count": 1898,
+          "percent": 63.3
+        },
+        {
+          "value": 2,
+          "count": 582,
+          "percent": 19.4
+        },
+        {
+          "value": 3,
+          "count": 179,
+          "percent": 6.0
+        },
+        {
+          "value": 6,
+          "count": 173,
+          "percent": 5.8
+        },
+        {
+          "value": 4,
+          "count": 102,
+          "percent": 3.4
+        },
+        {
+          "value": 5,
+          "count": 63,
+          "percent": 2.1
+        }
+      ],
+      "kind_incidence": [
+        {
+          "value": "physical product",
+          "count": 1274,
+          "percent": 42.5
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 496,
+          "percent": 16.5
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 406,
+          "percent": 13.5
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 340,
+          "percent": 11.3
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 334,
+          "percent": 11.1
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 251,
+          "percent": 8.4
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 237,
+          "percent": 7.9
+        },
+        {
+          "value": "installation/integration service",
+          "count": 157,
+          "percent": 5.2
+        },
+        {
+          "value": "other",
+          "count": 48,
+          "percent": 1.6
+        },
+        {
+          "value": "warranty/extended warranty",
+          "count": 41,
+          "percent": 1.4
+        },
+        {
+          "value": "cloud/hosting service",
+          "count": 39,
+          "percent": 1.3
+        },
+        {
+          "value": "training",
+          "count": 27,
+          "percent": 0.9
+        }
+      ],
+      "kind_primary": [
+        {
+          "value": "physical product",
+          "count": 1237,
+          "percent": 41.3
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 459,
+          "percent": 15.3
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 400,
+          "percent": 13.3
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 217,
+          "percent": 7.2
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 214,
+          "percent": 7.1
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 200,
+          "percent": 6.7
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 188,
+          "percent": 6.3
+        },
+        {
+          "value": "other",
+          "count": 37,
+          "percent": 1.2
+        },
+        {
+          "value": "cloud/hosting service",
+          "count": 23,
+          "percent": 0.8
+        },
+        {
+          "value": "installation/integration service",
+          "count": 20,
+          "percent": 0.7
+        },
+        {
+          "value": "warranty/extended warranty",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "training",
+          "count": 1,
+          "percent": 0.0
+        }
+      ],
+      "kind_combinations_top15": [
+        {
+          "value": "physical product",
+          "count": 1006,
+          "percent": 33.6
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 405,
+          "percent": 13.5
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 304,
+          "percent": 10.1
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 200,
+          "percent": 6.7
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 186,
+          "percent": 6.2
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 177,
+          "percent": 5.9
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 142,
+          "percent": 4.7
+        },
+        {
+          "value": "furniture/facilities + installation/integration service",
+          "count": 56,
+          "percent": 1.9
+        },
+        {
+          "value": "physical product + support/maintenance contract",
+          "count": 39,
+          "percent": 1.3
+        },
+        {
+          "value": "other",
+          "count": 36,
+          "percent": 1.2
+        },
+        {
+          "value": "installation/integration service + physical product",
+          "count": 35,
+          "percent": 1.2
+        },
+        {
+          "value": "software subscription/SaaS + support/maintenance contract",
+          "count": 29,
+          "percent": 1.0
+        },
+        {
+          "value": "consumables/supplies + physical product",
+          "count": 28,
+          "percent": 0.9
+        },
+        {
+          "value": "physical product + professional/consulting service",
+          "count": 27,
+          "percent": 0.9
+        },
+        {
+          "value": "physical product + software license (perpetual)",
+          "count": 26,
+          "percent": 0.9
+        }
+      ],
+      "top_level_incidence": [
+        {
+          "value": "Hardware",
+          "count": 1470,
+          "percent": 49.0
+        },
+        {
+          "value": "Software",
+          "count": 761,
+          "percent": 25.4
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 406,
+          "percent": 13.5
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 380,
+          "percent": 12.7
+        },
+        {
+          "value": "Services",
+          "count": 349,
+          "percent": 11.6
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 157,
+          "percent": 5.2
+        },
+        {
+          "value": "Other",
+          "count": 48,
+          "percent": 1.6
+        }
+      ],
+      "top_level_primary": [
+        {
+          "value": "Hardware",
+          "count": 1437,
+          "percent": 47.9
+        },
+        {
+          "value": "Software",
+          "count": 670,
+          "percent": 22.4
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 400,
+          "percent": 13.3
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 218,
+          "percent": 7.3
+        },
+        {
+          "value": "Services",
+          "count": 215,
+          "percent": 7.2
+        },
+        {
+          "value": "Other",
+          "count": 37,
+          "percent": 1.2
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 20,
+          "percent": 0.7
+        }
+      ],
+      "top_level_combinations": [
+        {
+          "value": "Hardware",
+          "count": 1220,
+          "percent": 40.7
+        },
+        {
+          "value": "Software",
+          "count": 574,
+          "percent": 19.2
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 304,
+          "percent": 10.1
+        },
+        {
+          "value": "Services",
+          "count": 201,
+          "percent": 6.7
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 179,
+          "percent": 6.0
+        },
+        {
+          "value": "Hardware + Maintenance & Support",
+          "count": 69,
+          "percent": 2.3
+        },
+        {
+          "value": "Maintenance & Support + Software",
+          "count": 57,
+          "percent": 1.9
+        },
+        {
+          "value": "Furniture / Facilities + Installation & Integration",
+          "count": 56,
+          "percent": 1.9
+        },
+        {
+          "value": "Hardware + Software",
+          "count": 45,
+          "percent": 1.5
+        },
+        {
+          "value": "Hardware + Installation & Integration",
+          "count": 38,
+          "percent": 1.3
+        },
+        {
+          "value": "Other",
+          "count": 36,
+          "percent": 1.2
+        },
+        {
+          "value": "Hardware + Services",
+          "count": 29,
+          "percent": 1.0
+        },
+        {
+          "value": "Services + Software",
+          "count": 29,
+          "percent": 1.0
+        },
+        {
+          "value": "Maintenance & Support + Services + Software",
+          "count": 19,
+          "percent": 0.6
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Software",
+          "count": 17,
+          "percent": 0.6
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 15,
+          "percent": 0.5
+        },
+        {
+          "value": "Furniture / Facilities + Installation & Integration + Services",
+          "count": 14,
+          "percent": 0.5
+        },
+        {
+          "value": "Furniture / Facilities + Hardware",
+          "count": 13,
+          "percent": 0.4
+        },
+        {
+          "value": "Maintenance & Support + Services",
+          "count": 12,
+          "percent": 0.4
+        },
+        {
+          "value": "Furniture / Facilities + Services",
+          "count": 12,
+          "percent": 0.4
+        },
+        {
+          "value": "Hardware + Installation & Integration + Services",
+          "count": 8,
+          "percent": 0.3
+        },
+        {
+          "value": "Hardware + Services + Software",
+          "count": 6,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support",
+          "count": 5,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Services",
+          "count": 4,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Other",
+          "count": 4,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Software",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "Maintenance & Support + Other + Services",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Furniture / Facilities + Maintenance & Support",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Software",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Other + Services",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Services + Software",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Installation & Integration + Maintenance & Support",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Services + Software",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Installation & Integration + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Installation & Integration + Maintenance & Support + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Furniture / Facilities + Installation & Integration + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Furniture / Facilities + Installation & Integration + Maintenance & Support",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Installation & Integration + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Furniture / Facilities + Other",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Installation & Integration + Maintenance & Support + Services",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Maintenance & Support + Other",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Furniture / Facilities + Installation & Integration + Maintenance & Support + Services",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Other",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Services",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Furniture / Facilities + Installation & Integration + Other",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Installation & Integration + Services",
+          "count": 1,
+          "percent": 0.0
+        }
+      ],
+      "lifecycle_primary": [
+        {
+          "value": "new purchase",
+          "count": 2686,
+          "percent": 89.6
+        },
+        {
+          "value": "renewal",
+          "count": 311,
+          "percent": 10.4
+        }
+      ],
+      "lifecycle_by_kind": {
+        "physical product": [
+          {
+            "value": "new purchase",
+            "count": 2182,
+            "percent": 100.0
+          }
+        ],
+        "software license (perpetual)": [
+          {
+            "value": "new purchase",
+            "count": 341,
+            "percent": 95.3
+          },
+          {
+            "value": "renewal",
+            "count": 17,
+            "percent": 4.7
+          }
+        ],
+        "furniture/facilities": [
+          {
+            "value": "new purchase",
+            "count": 596,
+            "percent": 100.0
+          }
+        ],
+        "consumables/supplies": [
+          {
+            "value": "new purchase",
+            "count": 380,
+            "percent": 100.0
+          }
+        ],
+        "support/maintenance contract": [
+          {
+            "value": "new purchase",
+            "count": 257,
+            "percent": 58.0
+          },
+          {
+            "value": "renewal",
+            "count": 186,
+            "percent": 42.0
+          }
+        ],
+        "professional/consulting service": [
+          {
+            "value": "new purchase",
+            "count": 396,
+            "percent": 99.5
+          },
+          {
+            "value": "renewal",
+            "count": 2,
+            "percent": 0.5
+          }
+        ],
+        "software subscription/SaaS": [
+          {
+            "value": "new purchase",
+            "count": 395,
+            "percent": 59.0
+          },
+          {
+            "value": "renewal",
+            "count": 274,
+            "percent": 41.0
+          }
+        ],
+        "cloud/hosting service": [
+          {
+            "value": "new purchase",
+            "count": 45,
+            "percent": 97.8
+          },
+          {
+            "value": "renewal",
+            "count": 1,
+            "percent": 2.2
+          }
+        ],
+        "installation/integration service": [
+          {
+            "value": "new purchase",
+            "count": 166,
+            "percent": 100.0
+          }
+        ],
+        "other": [
+          {
+            "value": "new purchase",
+            "count": 53,
+            "percent": 98.1
+          },
+          {
+            "value": "renewal",
+            "count": 1,
+            "percent": 1.9
+          }
+        ],
+        "warranty/extended warranty": [
+          {
+            "value": "new purchase",
+            "count": 41,
+            "percent": 100.0
+          }
+        ],
+        "training": [
+          {
+            "value": "new purchase",
+            "count": 27,
+            "percent": 100.0
+          }
+        ]
+      },
+      "domain_primary": [
+        {
+          "value": "other",
+          "count": 561,
+          "percent": 18.7
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 400,
+          "percent": 13.3
+        },
+        {
+          "value": "business/productivity software",
+          "count": 381,
+          "percent": 12.7
+        },
+        {
+          "value": "infrastructure/platform software",
+          "count": 258,
+          "percent": 8.6
+        },
+        {
+          "value": "cables/accessories/peripherals",
+          "count": 199,
+          "percent": 6.6
+        },
+        {
+          "value": "audio-visual",
+          "count": 198,
+          "percent": 6.6
+        },
+        {
+          "value": "cybersecurity",
+          "count": 184,
+          "percent": 6.1
+        },
+        {
+          "value": "end-user devices",
+          "count": 180,
+          "percent": 6.0
+        },
+        {
+          "value": "networking",
+          "count": 167,
+          "percent": 5.6
+        },
+        {
+          "value": "telecom/mobility",
+          "count": 145,
+          "percent": 4.8
+        },
+        {
+          "value": "printing/imaging",
+          "count": 119,
+          "percent": 4.0
+        },
+        {
+          "value": "storage/backup",
+          "count": 67,
+          "percent": 2.2
+        },
+        {
+          "value": "compute/servers",
+          "count": 60,
+          "percent": 2.0
+        },
+        {
+          "value": "data center/power/cooling",
+          "count": 59,
+          "percent": 2.0
+        },
+        {
+          "value": "lab/scientific/medical",
+          "count": 19,
+          "percent": 0.6
+        }
+      ],
+      "brand_name_only_percent": 34.6,
+      "rfi_percent": 3.4,
+      "attachment_only_percent": 0.1,
+      "multi_component_percent": 36.7,
+      "confidence": [
+        {
+          "value": "high",
+          "count": 2953,
+          "percent": 98.5
+        },
+        {
+          "value": "low",
+          "count": 39,
+          "percent": 1.3
+        },
+        {
+          "value": "medium",
+          "count": 5,
+          "percent": 0.2
+        }
+      ],
+      "other_whats_top30": [
+        {
+          "value": "market research response",
+          "count": 18,
+          "percent": 33.3
+        },
+        {
+          "value": "rsa token services",
+          "count": 5,
+          "percent": 9.3
+        },
+        {
+          "value": "shipping",
+          "count": 2,
+          "percent": 3.7
+        },
+        {
+          "value": "market research solicitation",
+          "count": 2,
+          "percent": 3.7
+        },
+        {
+          "value": "shipping services",
+          "count": 2,
+          "percent": 3.7
+        },
+        {
+          "value": "travel expenses",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "items listed on attached spreadsheet",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "data center services",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "office solutions",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "servicenow supplies and services",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "cable tv distribution service",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "travel and insurance",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "taa compliant material",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "rfq amendment",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "freight",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "processing fee",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "infrastructure equipment and services",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "freight shipping",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "cellular data plan",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "blanket purchase agreement services",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "folder price quote",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "proactive credits",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "flex allowance",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "it products",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "usb-3 sources",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "wifi services",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "barcoding and scanning solution",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "office supplies and services",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "packaged office solutions",
+          "count": 1,
+          "percent": 1.9
+        },
+        {
+          "value": "learning materials",
+          "count": 1,
+          "percent": 1.9
+        }
+      ],
+      "unusual_count": 135,
+      "unusual_sample": [
+        "The term 'Wisdom' is not a recognized commercial software product in this context; it may be a typo, a specific internal",
+        "This is a Request for Information (RFI) for market research, not a solicitation for the purchase of goods or services. V",
+        "The solicitation references an external spreadsheet for specific items and quantities but does not list them in the text",
+        "RFI only; no commitment to purchase",
+        "The solicitation is an RFI (Request for Information) rather than a formal RFQ, and the specific equipment list is in an ",
+        "The solicitation explicitly states it is not an official solicitation and not looking for quotes, yet requests product/4",
+        "The solicitation is a draft PWS for planning purposes only, with no formal requirements or specific deliverables defined",
+        "Requirement for cleared US citizen personnel and secure remote connections terminating at a cleared US facility for SAP",
+        "The solicitation title and description are extremely generic ('Software Service') with no specific details on the type, ",
+        "The solicitation text provided is purely administrative (submission instructions, deadlines, contact info) and contains ",
+        "The solicitation is extremely vague, requesting quotes for 'office solutions' without specifying any hardware, software,",
+        "The solicitation is an RFI (Request for Information) for market research, not a standard procurement RFQ for goods or a ",
+        "This is a Request for Information (RFI) for market research, not a procurement solicitation for goods or services. No IT",
+        "The solicitation lists the license as 'perpetual' but specifies a 1-year term with 'Reinstatement', which is a hybrid of",
+        "The 'kind' field was incorrectly set to 'cloud/hosting service' in the initial thought process; the correct kind is 'clo",
+        "The solicitation refers to a 'Bundle' without listing specific line items (e.g., specific software modules, hardware, or",
+        "Funds are not presently available for this contract",
+        "Requirement for 'ALL or NONE' brand name mandatory request and mandatory Letter of Authorization from resellers.",
+        "This is a Request for Information (RFI) for market research, not a procurement solicitation for goods or services. No IT",
+        "Sole source solicitation for specific OEM software with no authorized resellers",
+        "Specific equipment details are in an attached DOR not provided in the text.",
+        "Reinstatement fee requirement for software license",
+        "Requirement for specific UK 3-prong plug and 220V/50Hz compatibility for delivery to Cyprus",
+        "Sole source procurement for a specific software product named 'Data Innovations Instrument Manager' which appears to be ",
+        "The term 'operational supplies' is extremely generic and does not specify the nature of the items (e.g., office supplies",
+        "The solicitation references specific attached documents ('Salient Characteristics', 'Solicitation') containing the exact",
+        "The solicitation text is a placeholder reference to an external attachment (RFQ 5000223245) and does not contain the end",
+        "The solicitation is an RFI (Request for Information) for market research, not a procurement of goods or services for a G",
+        "None",
+        "The solicitation lists three distinct vendors (Ping Identity, F5, Broadcom) for a single 'Forward Proxy' requirement, as",
+        "The solicitation mentions 'services' alongside 'products' but does not specify the nature of the services (e.g., support",
+        "This is a Request for Information (RFI) for market research, not a procurement solicitation for goods or services. No IT",
+        "This is a Request for Information (RFI) for market research, not a formal procurement solicitation for goods or services",
+        "The solicitation is for a Blanket Purchase Agreement (BPA) covering undefined 'supplies and/or services' generally, with",
+        "The solicitation references a 'Bill of Materials (BOM)' which is not included in the text, making specific item details,",
+        "The solicitation text provided is a generic administrative header and does not contain the specific 'Specifications' or'",
+        "The solicitation is an RFI (Request for Information) rather than a formal RFQ/RFP, and the specific items are referenced",
+        "The solicitation references 'hand-written' quantities and an attachment not provided in the text, making the exact scope",
+        "The provided text contains only administrative instructions (RFQ number, email addresses) and no description of the IT, ",
+        "The text contains a typo in the 'kind' field for monitor arms and outlets where 'cloud/hosting service' was incorrectly;",
+        "This is a Request for Information (RFI) for market research, not a procurement solicitation for goods or services to be ",
+        "The requirement is for a service to feed programming channels (likely a headend or distribution solution) rather than a\u8d2d",
+        "The solicitation is an RFI (Request for Information) requesting pricing for an 'Equipment List' that is not included in,",
+        "Requirement for direct integration with Hill-Rom beds without middleware",
+        "Specific products are referenced in an attached Excel file not provided in the text.",
+        "Professional installation and trash removal services included with furniture delivery",
+        "The solicitation text is extremely minimal ('Please see attached') and does not specify the nature of the 'API Reporting",
+        "The solicitation is explicitly an RFI (Request for Information) and Sources Sought Notice, not a binding procurement. No",
+        "The solicitation is for 'material' without specifying the type of goods (e.g., hardware, software, supplies), making the",
+        "None",
+        "The item 'CM350 UDX V2' appears to be a specific radio compliance device or module, but the generic domain 'other' is a ",
+        "Funds not currently available; order intent stated for future date (Sep 2026)",
+        "The term 'FS stock' is highly ambiguous without the attached LOM (List of Materials). It likely refers to 'Field Stock'\u2014",
+        "This is a Request for Information (RFI) for market research, not a solicitation for the purchase of goods or services. V",
+        "This is a Request for Information (RFI) only; no actual procurement or contract award is occurring at this time.",
+        "The solicitation is explicitly labeled as an RFI (Request for Information) and states 'not a solicitation', yet it lists",
+        "The solicitation is an RFI (Request for Information) for market research, not a formal procurement for goods or services",
+        "The solicitation is an RFI (Request for Information) for market research, not a procurement of goods or services for a G",
+        "The text is an administrative notice extending a deadline for a bid protest; it does not describe any IT goods or IT/inf",
+        "The solicitation title 'DevSecOps 2.0' is ambiguous and likely refers to a specific methodology, framework, or a custom-"
+      ],
+      "legacy_comparison": {
+        "tagged_in_sample": 834,
+        "exact set match": {
+          "count": 554,
+          "percent": 66.4
+        },
+        "legacy \u2286 qwen": {
+          "count": 617,
+          "percent": 74.0
+        },
+        "primary in legacy": {
+          "count": 697,
+          "percent": 83.6
+        },
+        "software_new_vs_renewal": {
+          "legacy=software/new | qwen=new/other": 88,
+          "legacy=software/new | qwen=renewal": 1,
+          "legacy=software/renewal | qwen=new/other": 41,
+          "legacy=software/renewal | qwen=renewal": 63
+        }
+      }
+    },
+    "GSA 2GIT": {
+      "labeled": 2986,
+      "sample_requested": 3000,
+      "components_per_opp": [
+        {
+          "value": 1,
+          "count": 2087,
+          "percent": 69.9
+        },
+        {
+          "value": 2,
+          "count": 489,
+          "percent": 16.4
+        },
+        {
+          "value": 6,
+          "count": 156,
+          "percent": 5.2
+        },
+        {
+          "value": 3,
+          "count": 119,
+          "percent": 4.0
+        },
+        {
+          "value": 4,
+          "count": 93,
+          "percent": 3.1
+        },
+        {
+          "value": 5,
+          "count": 42,
+          "percent": 1.4
+        }
+      ],
+      "kind_incidence": [
+        {
+          "value": "physical product",
+          "count": 2098,
+          "percent": 70.3
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 383,
+          "percent": 12.8
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 301,
+          "percent": 10.1
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 248,
+          "percent": 8.3
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 82,
+          "percent": 2.7
+        },
+        {
+          "value": "other",
+          "count": 75,
+          "percent": 2.5
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 61,
+          "percent": 2.0
+        },
+        {
+          "value": "warranty/extended warranty",
+          "count": 57,
+          "percent": 1.9
+        },
+        {
+          "value": "installation/integration service",
+          "count": 37,
+          "percent": 1.2
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 13,
+          "percent": 0.4
+        },
+        {
+          "value": "training",
+          "count": 10,
+          "percent": 0.3
+        },
+        {
+          "value": "cloud/hosting service",
+          "count": 7,
+          "percent": 0.2
+        }
+      ],
+      "kind_primary": [
+        {
+          "value": "physical product",
+          "count": 2070,
+          "percent": 69.3
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 350,
+          "percent": 11.7
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 218,
+          "percent": 7.3
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 157,
+          "percent": 5.3
+        },
+        {
+          "value": "other",
+          "count": 66,
+          "percent": 2.2
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 59,
+          "percent": 2.0
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 33,
+          "percent": 1.1
+        },
+        {
+          "value": "installation/integration service",
+          "count": 11,
+          "percent": 0.4
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 10,
+          "percent": 0.3
+        },
+        {
+          "value": "warranty/extended warranty",
+          "count": 6,
+          "percent": 0.2
+        },
+        {
+          "value": "cloud/hosting service",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "training",
+          "count": 3,
+          "percent": 0.1
+        }
+      ],
+      "kind_combinations_top15": [
+        {
+          "value": "physical product",
+          "count": 1847,
+          "percent": 61.9
+        },
+        {
+          "value": "software subscription/SaaS",
+          "count": 322,
+          "percent": 10.8
+        },
+        {
+          "value": "software license (perpetual)",
+          "count": 189,
+          "percent": 6.3
+        },
+        {
+          "value": "support/maintenance contract",
+          "count": 148,
+          "percent": 5.0
+        },
+        {
+          "value": "other",
+          "count": 66,
+          "percent": 2.2
+        },
+        {
+          "value": "consumables/supplies",
+          "count": 55,
+          "percent": 1.8
+        },
+        {
+          "value": "physical product + software license (perpetual)",
+          "count": 46,
+          "percent": 1.5
+        },
+        {
+          "value": "physical product + support/maintenance contract",
+          "count": 38,
+          "percent": 1.3
+        },
+        {
+          "value": "professional/consulting service",
+          "count": 31,
+          "percent": 1.0
+        },
+        {
+          "value": "physical product + warranty/extended warranty",
+          "count": 30,
+          "percent": 1.0
+        },
+        {
+          "value": "consumables/supplies + physical product",
+          "count": 18,
+          "percent": 0.6
+        },
+        {
+          "value": "installation/integration service + physical product",
+          "count": 17,
+          "percent": 0.6
+        },
+        {
+          "value": "software subscription/SaaS + support/maintenance contract",
+          "count": 17,
+          "percent": 0.6
+        },
+        {
+          "value": "physical product + software subscription/SaaS",
+          "count": 13,
+          "percent": 0.4
+        },
+        {
+          "value": "physical product + professional/consulting service",
+          "count": 13,
+          "percent": 0.4
+        }
+      ],
+      "top_level_incidence": [
+        {
+          "value": "Hardware",
+          "count": 2153,
+          "percent": 72.1
+        },
+        {
+          "value": "Software",
+          "count": 671,
+          "percent": 22.5
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 303,
+          "percent": 10.1
+        },
+        {
+          "value": "Other",
+          "count": 75,
+          "percent": 2.5
+        },
+        {
+          "value": "Services",
+          "count": 70,
+          "percent": 2.3
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 37,
+          "percent": 1.2
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 13,
+          "percent": 0.4
+        }
+      ],
+      "top_level_primary": [
+        {
+          "value": "Hardware",
+          "count": 2129,
+          "percent": 71.3
+        },
+        {
+          "value": "Software",
+          "count": 571,
+          "percent": 19.1
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 163,
+          "percent": 5.5
+        },
+        {
+          "value": "Other",
+          "count": 66,
+          "percent": 2.2
+        },
+        {
+          "value": "Services",
+          "count": 36,
+          "percent": 1.2
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 11,
+          "percent": 0.4
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 10,
+          "percent": 0.3
+        }
+      ],
+      "top_level_combinations": [
+        {
+          "value": "Hardware",
+          "count": 1920,
+          "percent": 64.3
+        },
+        {
+          "value": "Software",
+          "count": 522,
+          "percent": 17.5
+        },
+        {
+          "value": "Maintenance & Support",
+          "count": 154,
+          "percent": 5.2
+        },
+        {
+          "value": "Hardware + Maintenance & Support",
+          "count": 72,
+          "percent": 2.4
+        },
+        {
+          "value": "Hardware + Software",
+          "count": 69,
+          "percent": 2.3
+        },
+        {
+          "value": "Other",
+          "count": 66,
+          "percent": 2.2
+        },
+        {
+          "value": "Services",
+          "count": 33,
+          "percent": 1.1
+        },
+        {
+          "value": "Maintenance & Support + Software",
+          "count": 30,
+          "percent": 1.0
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Software",
+          "count": 29,
+          "percent": 1.0
+        },
+        {
+          "value": "Hardware + Installation & Integration",
+          "count": 17,
+          "percent": 0.6
+        },
+        {
+          "value": "Hardware + Services",
+          "count": 14,
+          "percent": 0.5
+        },
+        {
+          "value": "Installation & Integration",
+          "count": 9,
+          "percent": 0.3
+        },
+        {
+          "value": "Furniture / Facilities + Hardware",
+          "count": 7,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Other",
+          "count": 7,
+          "percent": 0.2
+        },
+        {
+          "value": "Services + Software",
+          "count": 6,
+          "percent": 0.2
+        },
+        {
+          "value": "Maintenance & Support + Services + Software",
+          "count": 5,
+          "percent": 0.2
+        },
+        {
+          "value": "Hardware + Maintenance & Support + Services",
+          "count": 5,
+          "percent": 0.2
+        },
+        {
+          "value": "Furniture / Facilities",
+          "count": 4,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support",
+          "count": 3,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Software",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Services",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Furniture / Facilities + Hardware + Software",
+          "count": 2,
+          "percent": 0.1
+        },
+        {
+          "value": "Hardware + Installation & Integration + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Maintenance & Support + Services",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Other + Services",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Installation & Integration + Maintenance & Support + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Maintenance & Support + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Installation & Integration + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Hardware + Services + Software",
+          "count": 1,
+          "percent": 0.0
+        },
+        {
+          "value": "Other + Software",
+          "count": 1,
+          "percent": 0.0
+        }
+      ],
+      "lifecycle_primary": [
+        {
+          "value": "new purchase",
+          "count": 2657,
+          "percent": 89.0
+        },
+        {
+          "value": "renewal",
+          "count": 329,
+          "percent": 11.0
+        }
+      ],
+      "lifecycle_by_kind": {
+        "consumables/supplies": [
+          {
+            "value": "new purchase",
+            "count": 118,
+            "percent": 100.0
+          }
+        ],
+        "software subscription/SaaS": [
+          {
+            "value": "renewal",
+            "count": 317,
+            "percent": 56.0
+          },
+          {
+            "value": "new purchase",
+            "count": 249,
+            "percent": 44.0
+          }
+        ],
+        "physical product": [
+          {
+            "value": "new purchase",
+            "count": 3254,
+            "percent": 100.0
+          }
+        ],
+        "software license (perpetual)": [
+          {
+            "value": "new purchase",
+            "count": 378,
+            "percent": 97.2
+          },
+          {
+            "value": "renewal",
+            "count": 11,
+            "percent": 2.8
+          }
+        ],
+        "support/maintenance contract": [
+          {
+            "value": "renewal",
+            "count": 179,
+            "percent": 53.0
+          },
+          {
+            "value": "new purchase",
+            "count": 159,
+            "percent": 47.0
+          }
+        ],
+        "installation/integration service": [
+          {
+            "value": "new purchase",
+            "count": 37,
+            "percent": 100.0
+          }
+        ],
+        "professional/consulting service": [
+          {
+            "value": "new purchase",
+            "count": 64,
+            "percent": 98.5
+          },
+          {
+            "value": "renewal",
+            "count": 1,
+            "percent": 1.5
+          }
+        ],
+        "cloud/hosting service": [
+          {
+            "value": "new purchase",
+            "count": 6,
+            "percent": 85.7
+          },
+          {
+            "value": "renewal",
+            "count": 1,
+            "percent": 14.3
+          }
+        ],
+        "other": [
+          {
+            "value": "new purchase",
+            "count": 73,
+            "percent": 97.3
+          },
+          {
+            "value": "renewal",
+            "count": 2,
+            "percent": 2.7
+          }
+        ],
+        "warranty/extended warranty": [
+          {
+            "value": "new purchase",
+            "count": 56,
+            "percent": 96.6
+          },
+          {
+            "value": "renewal",
+            "count": 2,
+            "percent": 3.4
+          }
+        ],
+        "training": [
+          {
+            "value": "new purchase",
+            "count": 9,
+            "percent": 90.0
+          },
+          {
+            "value": "renewal",
+            "count": 1,
+            "percent": 10.0
+          }
+        ],
+        "furniture/facilities": [
+          {
+            "value": "new purchase",
+            "count": 23,
+            "percent": 100.0
+          }
+        ]
+      },
+      "domain_primary": [
+        {
+          "value": "networking",
+          "count": 413,
+          "percent": 13.8
+        },
+        {
+          "value": "end-user devices",
+          "count": 405,
+          "percent": 13.6
+        },
+        {
+          "value": "cables/accessories/peripherals",
+          "count": 401,
+          "percent": 13.4
+        },
+        {
+          "value": "other",
+          "count": 334,
+          "percent": 11.2
+        },
+        {
+          "value": "infrastructure/platform software",
+          "count": 277,
+          "percent": 9.3
+        },
+        {
+          "value": "business/productivity software",
+          "count": 224,
+          "percent": 7.5
+        },
+        {
+          "value": "storage/backup",
+          "count": 192,
+          "percent": 6.4
+        },
+        {
+          "value": "audio-visual",
+          "count": 189,
+          "percent": 6.3
+        },
+        {
+          "value": "compute/servers",
+          "count": 174,
+          "percent": 5.8
+        },
+        {
+          "value": "cybersecurity",
+          "count": 136,
+          "percent": 4.6
+        },
+        {
+          "value": "telecom/mobility",
+          "count": 105,
+          "percent": 3.5
+        },
+        {
+          "value": "data center/power/cooling",
+          "count": 82,
+          "percent": 2.7
+        },
+        {
+          "value": "printing/imaging",
+          "count": 36,
+          "percent": 1.2
+        },
+        {
+          "value": "furniture/facilities",
+          "count": 12,
+          "percent": 0.4
+        },
+        {
+          "value": "lab/scientific/medical",
+          "count": 6,
+          "percent": 0.2
+        }
+      ],
+      "brand_name_only_percent": 42.4,
+      "rfi_percent": 2.1,
+      "attachment_only_percent": 3.2,
+      "multi_component_percent": 30.1,
+      "confidence": [
+        {
+          "value": "high",
+          "count": 2825,
+          "percent": 94.6
+        },
+        {
+          "value": "low",
+          "count": 153,
+          "percent": 5.1
+        },
+        {
+          "value": "medium",
+          "count": 8,
+          "percent": 0.3
+        }
+      ],
+      "other_whats_top30": [
+        {
+          "value": "items from bom",
+          "count": 9,
+          "percent": 12.0
+        },
+        {
+          "value": "items from attached bom",
+          "count": 9,
+          "percent": 12.0
+        },
+        {
+          "value": "line items",
+          "count": 5,
+          "percent": 6.7
+        },
+        {
+          "value": "items listed in lom",
+          "count": 5,
+          "percent": 6.7
+        },
+        {
+          "value": "market research response",
+          "count": 4,
+          "percent": 5.3
+        },
+        {
+          "value": "materials",
+          "count": 3,
+          "percent": 4.0
+        },
+        {
+          "value": "it equipment and services",
+          "count": 3,
+          "percent": 4.0
+        },
+        {
+          "value": "sensor bus",
+          "count": 2,
+          "percent": 2.7
+        },
+        {
+          "value": "shipping and handling",
+          "count": 2,
+          "percent": 2.7
+        },
+        {
+          "value": "shipping",
+          "count": 2,
+          "percent": 2.7
+        },
+        {
+          "value": "renovation materials and services",
+          "count": 2,
+          "percent": 2.7
+        },
+        {
+          "value": "products",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "red hat certification exam vouchers",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "jwics solution",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "medical center equipment and supplies",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "list of materials",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "infrastructure materials",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "it office products",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "network and hardware upgrade",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "manufacturer authorization letter",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "sipr room standup equipment and services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "gem one",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "computer quote",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "tech solution",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "power upgrades and equipment",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "data center equipment",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "virtual storage area network",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "taa compliance",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "it procurement services",
+          "count": 1,
+          "percent": 1.3
+        },
+        {
+          "value": "items requested",
+          "count": 1,
+          "percent": 1.3
+        }
+      ],
+      "unusual_count": 245,
+      "unusual_sample": [
+        "No specific items listed; only a reference to an attached document.",
+        "Purchase is contingent on a Continuing Resolution (CR) and is an unfunded requirement with no guarantee of execution in ",
+        "The solicitation references an attached Bill of Material (BoM) and a redacted Justification and Approval (J&A) for brand",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific\u578b\u53f7",
+        "Strict 'no like components' clause requiring exact FLIR A50 model with specific 51-degree lens and science kit; no sub-5",
+        "Requirement to physically remove or exclude Wi-Fi/Bluetooth capabilities from the hardware",
+        "The solicitation references an attached document for 'salient characteristics' and 'brand name justification' which is a",
+        "The solicitation is an RFI (Request for Information) with no specific line items, quantities, or technical details; the'",
+        "Requirement for no wireless, WiFi, or Bluetooth capabilities",
+        "No specific items listed in the provided text; only a reference to an attached document.",
+        "The solicitation references an attachment for the detailed listing which is not provided in the text, preventing the ID,",
+        "The text mentions 'Fiber cabling' but does not specify quantity, length, or type (e.g., single-mode, multi-mode). The 'c",
+        "The title explicitly states 'Renewal Purchase' but the description is missing. The term 'Cradepoint' appears to be a typ",
+        "The solicitation does not list specific items in the text, referring instead to attached PDF files (SCOIN and SCOW List)",
+        "The solicitation text is a set of administrative instructions and does not describe any specific products, services, or\u54c1",
+        "The solicitation text explicitly states 'Please see attachment for line items' but does not list the items in the text. ",
+        "Solicitation explicitly prohibits 'like components', requiring exact OEM parts for a specialized data acquisition system",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific\u8bc6\u522b",
+        "The solicitation specifies a discontinued model (UNIMUX-DVI-8HD) but notes the manufacturer can still sell it, which is ",
+        "The solicitation references an external 'products sheet' attachment for specific items, but the text itself does not dis",
+        "Requirement for devices with wireless capabilities (Wi-Fi, Bluetooth) and external memory (USB) permanently disabled or ",
+        "The solicitation text does not specify the actual goods or services being procured, only referencing an attached RFQ. 'G",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific, ",
+        "This is a Request for Information (RFI) for market research, not a solicitation for actual goods or services. No IT proc",
+        "The solicitation title 'Option Cards & Cables' is generic; without the attached RFQ, specific technical specifications, ",
+        "The 'kind' field was incorrectly set to 'cloud/hosting service' in the initial thought process; it should be 'cables/per",
+        "The solicitation is extremely vague, referring only to 'IT components' without specifying hardware types (e.g., servers,",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific, ",
+        "The solicitation is an RFI (Request for Information) and explicitly states 'Please see equipment list for description',,",
+        "None",
+        "Part numbers used as identifiers without explicit brand names; 'B064' and 'B055' likely refer to specific model lines (e",
+        "The solicitation references an attached spreadsheet for specific quantities and models, but the text itself does not dis",
+        "The solicitation text does not describe the specific items being purchased, only referencing an attached file for specs.",
+        "The solicitation explicitly states 'This is a brand name requirement' but does not specify the brand name in the text, a",
+        "The solicitation explicitly states 'No installation or services are needed' and refers to an external attachment ('Item:",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific, ",
+        "The product is a specialized software license bundle for aviation data interfaces (ARINC 429/717), which is a niche use.",
+        "The solicitation is an RFI (Request for Information) with a description of 'Market research quote requested' and no line",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific, ",
+        "The text lists a 'Maintenance Company' as the vendor for the maintenance, but does not explicitly name the OEM of the '9",
+        "The solicitation references an 'attached list of materials' which is not provided in the text, making specific component",
+        "The solicitation text does not list specific items; it only references an attached 'LOM' (List of Materials). The actual",
+        "The solicitation text does not list specific items; it only references an attached 'LOM' (List of Materials) which is a ",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific, ",
+        "None",
+        "The solicitation refers to an 'attached list of materials' which is not included in the text, preventing specific item, ",
+        "The solicitation is an RFI (Request for Information) requesting an equipment list rather than a formal procurement of a ",
+        "Requirement for 100% non-WIFI unit with no internal WiFi capability",
+        "The solicitation text is a placeholder referring to an external attachment ('LOM') which is not provided. The specific '",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific '",
+        "This is a Market Research Inquiry (RFI) solicitation, not a procurement RFQ for goods or services. The government is not",
+        "The solicitation is explicitly for market research only (RFI) and does not constitute a binding procurement order, yet a",
+        "The term 'SVTCs' is not a standard industry acronym for a specific IT product category; it likely refers to a specific, ",
+        "The solicitation references an attached Bill of Materials (BOM) which is not provided in the text, preventing specific\u8bc6\u522b",
+        "The solicitation references an attached BOM (Bill of Materials) which is not provided in the text, preventing specific, ",
+        "The solicitation title 'Vcinity ULT X Metal Hardware Suite' is highly specific and likely refers to a proprietary or non",
+        "RFI (Request for Information) issued for a specific proprietary product (Garner Ironclad) with 'no substitutes' implied,",
+        "The solicitation bundles 'test software' and 'computers' into a single line item with a specific SKU (AP-CONFIG-KIT), bl",
+        "The solicitation text explicitly states 'Please see attachment for line items' but does not contain the actual line item",
+        "The solicitation explicitly references an attached Bill of Materials (BOM) which is not provided in the text. Without B2"
+      ],
+      "legacy_comparison": {
+        "tagged_in_sample": 917,
+        "exact set match": {
+          "count": 734,
+          "percent": 80.0
+        },
+        "legacy \u2286 qwen": {
+          "count": 772,
+          "percent": 84.2
+        },
+        "primary in legacy": {
+          "count": 874,
+          "percent": 95.3
+        },
+        "software_new_vs_renewal": {
+          "legacy=software/new | qwen=new/other": 56,
+          "legacy=software/new | qwen=renewal": 2,
+          "legacy=software/renewal | qwen=new/other": 33,
+          "legacy=software/renewal | qwen=renewal": 79
+        }
+      }
+    }
+  }
+}

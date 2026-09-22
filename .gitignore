@@ -1,0 +1,9 @@
+qwen_discovery/sample.jsonl
+data/
+results/**/raw/
+__pycache__/
+.pytest_cache/
+*.pyc
+Federal_Opportunity_Classification_Report.pdf
+Federal_Opportunity_Classification_Report.docx
+report_assets/
