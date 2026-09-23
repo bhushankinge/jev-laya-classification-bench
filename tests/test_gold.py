@@ -36,3 +36,7 @@ def test_oem_heavy_plus_distributor_addons_via_disti_is_mixed():
 def test_sql_fingerprint_bool_is_configured_build():
     lines = [line(DISTI, "Dell", None) | {"fingerprint": True}]
     assert fulfillment_from_lines(lines) == "configured build"
+
+def test_freight_line_without_manufacturer_does_not_make_it_mixed():
+    lines = [line(DISTI, None)] + [line(DISTI, "Cisco") for _ in range(8)]
+    assert fulfillment_from_lines(lines) == "configured build"
