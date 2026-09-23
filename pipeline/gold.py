@@ -1,0 +1,98 @@
+"""Gold sets from quotes (spec Section 5). Read-only the CRM database. Ids and labels only, no text."""
+import argparse, json, re
+from collections import Counter
+from datetime import date
+from . import common
+
+TOP = {"hardware": "Hardware", "software": "Software", "services": "Services",
+       "maintenance": "Maintenance & Support", "other": "Other"}
+DISTRIBUTORS = re.compile(r"synnex|ingram|d&h|b&h", re.I)
+CONFIGURATOR = re.compile(r"ccw_line_number|deal_id|cisco_quote_id|oca_quote|iquote|dell_quote|premier_quote|dell contract#", re.I)
+OEM_HEAVY_MIN_LINES = 8
+
+
+def fulfillment_from_lines(lines: list[dict]) -> str | None:
+    """Rule from spec Section 5. Returns a FULFILLMENT value or None (unlabeled)."""
+    if not lines:
+        return None
+    ccw_lines = [bool(CONFIGURATOR.search(l.get("extracted_data") or "")) for l in lines]
+    disti_lines = [bool(DISTRIBUTORS.search(l.get("partner") or "")) for l in lines]
+    per_mfr = Counter(l.get("manufacturer") for l in lines if l.get("manufacturer"))
+    oem_heavy = any(n >= OEM_HEAVY_MIN_LINES for n in per_mfr.values()) and not any(disti_lines)
+    plain_disti = any(d and not c for d, c in zip(disti_lines, ccw_lines))
+    if any(ccw_lines) and plain_disti:
+        return "mixed"
+    if any(ccw_lines) or oem_heavy:
+        return "configured build"
+    if all(disti_lines):
+        return "à la carte"
+    return None
+
+
+def catalog_fingerprints(conn) -> dict[str, int]:
+    cur = common.cursor(conn)
+    cur.execute("SELECT extracted_data FROM public.quote_line_items WHERE extracted_data IS NOT NULL ORDER BY random() LIMIT 5000")
+    keys = Counter()
+    for r in cur.fetchall():
+        try:
+            d = json.loads(r["extracted_data"])
+            keys.update(k.lower() for k in (d.get("raw") or {}).keys())
+        except (ValueError, AttributeError):
+            continue
+    return dict(keys.most_common(60))
+
+
+def build_composition(conn, out_path):
+    cur = common.cursor(conn)
+    cur.execute("""
+      WITH typed AS (
+        SELECT q.id, q.opportunity_id, v.name vehicle, coalesce(q.updated_at, q.created_at) t
+        FROM public.quotes q JOIN public.vehicles v ON v.id=q.vehicle_id
+        WHERE q.opportunity_id IS NOT NULL AND v.name IN ('SEWP','GSA MAS','GSA 2GIT')
+          AND EXISTS (SELECT 1 FROM public.quote_line_items x WHERE x.quote_id=q.id AND x.product_type_id IS NOT NULL)),
+      latest AS (SELECT *, row_number() OVER (PARTITION BY opportunity_id ORDER BY t DESC NULLS LAST, id DESC) rn FROM typed)
+      SELECT l.opportunity_id::text id, l.vehicle, l.id::text quote_id, array_agg(DISTINCT lower(d.value)) types
+      FROM latest l JOIN public.quote_line_items qli ON qli.quote_id=l.id
+      JOIN public.dropdown_options d ON d.id=qli.product_type_id
+      WHERE l.rn=1 GROUP BY 1,2,3""")
+    n = 0
+    for r in cur.fetchall():
+        classes = sorted({TOP.get(t, "Other") for t in r["types"]})
+        common.append_jsonl(out_path, {"id": r["id"], "vehicle": r["vehicle"], "classes": classes, "quote_id": r["quote_id"]})
+        n += 1
+    return n
+
+
+def build_fulfillment(conn, out_path):
+    cur = common.cursor(conn)
+    cur.execute("""
+      SELECT q.opportunity_id::text id, v.name vehicle,
+             json_agg(json_build_object('partner', p.name, 'manufacturer', m.name, 'extracted_data', left(qli.extracted_data, 400))) lines
+      FROM public.quotes q JOIN public.vehicles v ON v.id=q.vehicle_id
+      JOIN public.quote_line_items qli ON qli.quote_id=q.id
+      LEFT JOIN public.partners p ON p.id=qli.partner_id
+      LEFT JOIN public.manufacturers m ON m.id=qli.manufacturer_id
+      WHERE q.opportunity_id IS NOT NULL AND v.name IN ('SEWP','GSA MAS','GSA 2GIT')
+      GROUP BY 1,2""")
+    counts = Counter()
+    for r in cur.fetchall():
+        mode = fulfillment_from_lines(r["lines"])
+        counts[mode] += 1
+        if mode:
+            ev = {"n_lines": len(r["lines"]), "ccw": any(CONFIGURATOR.search(l.get("extracted_data") or "") for l in r["lines"])}
+            common.append_jsonl(out_path, {"id": r["id"], "vehicle": r["vehicle"], "fulfillment_mode": mode, "evidence": ev})
+    return dict(counts)
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("what", choices=["composition", "fulfillment", "fingerprints"])
+    a = ap.parse_args()
+    conn = common.db()
+    tag = date.today().strftime("%Y%m%d")
+    if a.what == "composition":
+        print("rows:", build_composition(conn, common.GOLD_DIR / f"composition-{tag}.jsonl"))
+    elif a.what == "fulfillment":
+        print("counts:", build_fulfillment(conn, common.GOLD_DIR / f"fulfillment-{tag}.jsonl"))
+    else:
+        print(json.dumps(catalog_fingerprints(conn), indent=1))
