@@ -11,13 +11,21 @@ CONFIGURATOR = re.compile(r"ccw_line_number|deal_id|cisco_quote_id|oca_quote|iqu
 OEM_HEAVY_MIN_LINES = 8
 
 
+def _fingerprinted(l: dict) -> bool:
+    """A line is fingerprinted per the SQL-computed 'fingerprint' bool (DB path), or by
+    regex over 'extracted_data' when that key is absent (unit tests)."""
+    if "fingerprint" in l:
+        return l["fingerprint"] is True
+    return bool(CONFIGURATOR.search(l.get("extracted_data") or ""))
+
+
 def fulfillment_from_lines(lines: list[dict]) -> str | None:
     """Rule from spec Section 5 (fix round 1: TD SYNNEX is the fulfillment partner on
     nearly every line including configured OEM builds, so distributor presence must not
     veto "configured build"). Returns a FULFILLMENT value or None (unlabeled)."""
     if not lines:
         return None
-    ccw_lines = [bool(CONFIGURATOR.search(l.get("extracted_data") or "")) for l in lines]
+    ccw_lines = [_fingerprinted(l) for l in lines]
     manufacturers = [l.get("manufacturer") for l in lines]
     per_mfr = Counter(m for m in manufacturers if m)
     heavy = {m for m, n in per_mfr.items() if n >= OEM_HEAVY_MIN_LINES}
@@ -75,19 +83,19 @@ def build_fulfillment(conn, out_path):
     cur = common.cursor(conn)
     cur.execute("""
       SELECT q.opportunity_id::text id, v.name vehicle,
-             json_agg(json_build_object('partner', p.name, 'manufacturer', m.name, 'extracted_data', left(qli.extracted_data, 400))) lines
+             json_agg(json_build_object('partner', p.name, 'manufacturer', m.name, 'fingerprint', (qli.extracted_data ~* %s))) lines
       FROM public.quotes q JOIN public.vehicles v ON v.id=q.vehicle_id
       JOIN public.quote_line_items qli ON qli.quote_id=q.id
       LEFT JOIN public.partners p ON p.id=qli.partner_id
       LEFT JOIN public.manufacturers m ON m.id=qli.manufacturer_id
       WHERE q.opportunity_id IS NOT NULL AND v.name IN ('SEWP','GSA MAS','GSA 2GIT')
-      GROUP BY 1,2""")
+      GROUP BY 1,2""", (CONFIGURATOR.pattern,))
     counts = Counter()
     for r in cur.fetchall():
         mode = fulfillment_from_lines(r["lines"])
         counts[mode] += 1
         if mode:
-            ev = {"n_lines": len(r["lines"]), "ccw": any(CONFIGURATOR.search(l.get("extracted_data") or "") for l in r["lines"])}
+            ev = {"n_lines": len(r["lines"]), "ccw": any(_fingerprinted(l) for l in r["lines"])}
             common.append_jsonl(out_path, {"id": r["id"], "vehicle": r["vehicle"], "fulfillment_mode": mode, "evidence": ev})
     return dict(counts)
 
