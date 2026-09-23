@@ -1,4 +1,5 @@
 """Label sample rows with Jev. Resumable; ≤ MAX_RPS requests/second; logs tokens and latency.
+Error rows are retried on the next run; readers must take the last row per id.
 
     python3 -m pipeline.label_jev --variant A --state S2 --verify          # 3 rows, prints raw answers
     python3 -m pipeline.label_jev --variant A --state S2 --limit 2000

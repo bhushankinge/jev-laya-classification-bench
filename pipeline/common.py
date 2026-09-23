@@ -54,4 +54,16 @@ def append_jsonl(path: Path, row: dict) -> None:
 
 
 def done_ids(path: Path) -> set[str]:
-    return {r["id"] for r in read_jsonl(path) if "id" in r}
+    """Ids considered complete for resume purposes. Error rows are excluded so they are retried
+    on the next run (a later success line for the same id then sits alongside the old error line)."""
+    return {r["id"] for r in read_jsonl(path) if "id" in r and "error" not in r}
+
+
+def latest_by_id(path: Path) -> dict:
+    """The last row per id (later lines win), so a retried success supersedes an earlier error row
+    for the same id without needing the file to be rewritten in place."""
+    out = {}
+    for r in read_jsonl(path):
+        if "id" in r:
+            out[r["id"]] = r
+    return out
