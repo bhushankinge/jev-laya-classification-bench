@@ -12,18 +12,26 @@ OEM_HEAVY_MIN_LINES = 8
 
 
 def fulfillment_from_lines(lines: list[dict]) -> str | None:
-    """Rule from spec Section 5. Returns a FULFILLMENT value or None (unlabeled)."""
+    """Rule from spec Section 5 (fix round 1: TD SYNNEX is the fulfillment partner on
+    nearly every line including configured OEM builds, so distributor presence must not
+    veto "configured build"). Returns a FULFILLMENT value or None (unlabeled)."""
     if not lines:
         return None
     ccw_lines = [bool(CONFIGURATOR.search(l.get("extracted_data") or "")) for l in lines]
-    disti_lines = [bool(DISTRIBUTORS.search(l.get("partner") or "")) for l in lines]
-    per_mfr = Counter(l.get("manufacturer") for l in lines if l.get("manufacturer"))
-    oem_heavy = any(n >= OEM_HEAVY_MIN_LINES for n in per_mfr.values()) and not any(disti_lines)
-    plain_disti = any(d and not c for d, c in zip(disti_lines, ccw_lines))
-    if any(ccw_lines) and plain_disti:
+    manufacturers = [l.get("manufacturer") for l in lines]
+    per_mfr = Counter(m for m in manufacturers if m)
+    heavy = {m for m, n in per_mfr.items() if n >= OEM_HEAVY_MIN_LINES}
+    configured = bool(any(ccw_lines) or heavy)
+    fingerprinted_mfrs = {manufacturers[i] for i, c in enumerate(ccw_lines) if c and manufacturers[i]}
+    unexplained = any(
+        not ccw_lines[i] and manufacturers[i] not in heavy and manufacturers[i] not in fingerprinted_mfrs
+        for i in range(len(lines))
+    )
+    if configured and unexplained:
         return "mixed"
-    if any(ccw_lines) or oem_heavy:
+    if configured:
         return "configured build"
+    disti_lines = [bool(DISTRIBUTORS.search(l.get("partner") or "")) for l in lines]
     if all(disti_lines):
         return "à la carte"
     return None

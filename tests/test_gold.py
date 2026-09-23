@@ -24,3 +24,11 @@ def test_ccw_plus_distributor_addons_is_mixed():
 def test_ambiguous_is_unlabeled():
     lines = [line(None, "Cisco"), line(None, "Apple")]
     assert fulfillment_from_lines(lines) is None
+
+def test_oem_heavy_with_distributor_partner_is_still_configured_build():
+    lines = [line(DISTI, "Hewlett Packard Enterprise CO") for _ in range(8)]
+    assert fulfillment_from_lines(lines) == "configured build"
+
+def test_oem_heavy_plus_distributor_addons_via_disti_is_mixed():
+    lines = [line(DISTI, "Cisco") for _ in range(8)] + [line(DISTI, "Belkin") for _ in range(2)]
+    assert fulfillment_from_lines(lines) == "mixed"
