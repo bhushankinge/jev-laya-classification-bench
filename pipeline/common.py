@@ -1,7 +1,6 @@
 """Shared paths, credential readers and JSONL helpers. Credentials are read at call time, never stored."""
 import json, re
 from pathlib import Path
-import psycopg2, psycopg2.extras
 
 ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT / "qwen_discovery" / "sample.jsonl"
@@ -29,6 +28,7 @@ def jev_key() -> str:
 
 
 def db():
+    import psycopg2  # lazy: bench venvs (e.g. Laya) lack this driver and never call db()/cursor()
     row = next(l for l in _CRED.read_text().splitlines() if "<db-row>" in l)
     pw = re.search(r"Admin: \*\*<db-user> / ([^*]+)\*\*", row).group(1).strip()
     conn = psycopg2.connect(host="<db-host>", port=5432, dbname="<db-name>",
@@ -38,6 +38,7 @@ def db():
 
 
 def cursor(conn):
+    import psycopg2.extras
     return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
 
