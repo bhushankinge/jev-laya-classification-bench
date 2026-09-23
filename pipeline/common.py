@@ -1,5 +1,6 @@
 """Shared paths, credential readers and JSONL helpers. Credentials are read at call time, never stored."""
 import json, re
+from itertools import zip_longest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +59,27 @@ def done_ids(path: Path) -> set[str]:
     """Ids considered complete for resume purposes. Error rows are excluded so they are retried
     on the next run (a later success line for the same id then sits alongside the old error line)."""
     return {r["id"] for r in read_jsonl(path) if "id" in r and "error" not in r}
+
+
+def select_rows(rows: list[dict], limit=None, done=(), ids_from=None, balanced=False) -> list[dict]:
+    """The rows a labeler should do next.
+
+    ids_from: a set of ids or a jsonl path (e.g. a gold file) to restrict to.
+    balanced: interleave vehicles round-robin, so a --limit prefix is not one vehicle.
+    The limit is applied BEFORE the done-filter, so resuming keeps the same prefix instead of
+    walking further down the sample on every run."""
+    if ids_from is not None:
+        keep = ids_from if isinstance(ids_from, (set, frozenset, dict)) else {r["id"] for r in read_jsonl(ids_from)}
+        rows = [r for r in rows if r["id"] in keep]
+    if balanced:
+        by_vehicle = {}
+        for r in rows:
+            by_vehicle.setdefault(r.get("vehicle"), []).append(r)
+        rows = [r for group in zip_longest(*(by_vehicle[v] for v in sorted(by_vehicle, key=str)))
+                for r in group if r is not None]
+    if limit:
+        rows = rows[:limit]
+    return [r for r in rows if r["id"] not in done]
 
 
 def latest_by_id(path: Path) -> dict:

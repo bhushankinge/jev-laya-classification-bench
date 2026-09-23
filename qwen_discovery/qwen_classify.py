@@ -153,6 +153,7 @@ def call(r, sess):
             "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt_for(r)}],
             "response_format": {"type": "json_schema", "json_schema": {"name": "rfq", "schema": SCHEMA, "strict": True}},
             "chat_template_kwargs": {"enable_thinking": False}}
+    err = "unauthorized"
     for attempt in range(4):
         try:
             resp = sess.post(ENDPOINT, json=body, headers={"Authorization": f"Bearer {_key['v']}"}, timeout=180, verify=False)
@@ -173,7 +174,10 @@ def label_all(limit=None):
     done = set()
     if LABELS.exists():
         for line in LABELS.open():
-            try: done.add(json.loads(line)["id"])
+            try:
+                rec = json.loads(line)
+                if "error" not in rec:   # error rows are retried on the next run
+                    done.add(rec["id"])
             except Exception: pass
     rows = [json.loads(l) for l in SAMPLE.open()]
     todo = [r for r in rows if r["id"] not in done]
