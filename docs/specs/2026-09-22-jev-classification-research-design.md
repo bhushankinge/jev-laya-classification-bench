@@ -80,15 +80,23 @@ the Section 2 schema by a fixed function (`kind → subclass`, primary component
 1. **Composition gold** (top level only). For every opportunity with at least one typed quote line, the latest typed
    quote's set of Product Types mapped to top-level classes (the mapping already in `collect_report_data.py`).
    Expected size: SEWP ≈ 7,700, GSA MAS ≈ 340, GSA 2GIT ≈ 330.
-2. **Fulfillment gold**. Per quoted opportunity, over all its quote lines:
+2. **Fulfillment gold**. Per quoted opportunity, over the hardware-typed lines of its latest typed quote
+   (the same quote the composition gold describes; ruling 2026-09-22: superseded quotes and non-hardware
+   lines said nothing about how hardware is sourced and diluted the rule). A line with no manufacturer
+   (freight, fees) cannot make a build `mixed`:
    - configured build if any line's `extracted_data` carries a configurator fingerprint (Cisco: `ccw_line_number`,
-     `deal_id`, `cisco_quote_id`; HPE and Dell fingerprints to be catalogued in E0 by inspecting `extracted_data`
-     keys and `backup_data`), or one manufacturer has ≥ 8 lines and no distributor partner on those lines;
-   - à la carte if every line's partner is a distributor (TD SYNNEX, Ingram Micro, D&H, B&H) and no manufacturer
-     has ≥ 8 lines;
-   - mixed if both conditions hold; otherwise unlabeled.
-   Observed on SEWP: 184 explicit Cisco CCW, 1,627 OEM-heavy, 4,489 distributor-only. The proxy rules are validated
-   against 200 human-labeled hardware rows before they are trusted (E4).
+     `deal_id`, `cisco_quote_id`; Dell: `dell contract#`; no HPE key was found in E0), or one
+     manufacturer has ≥ 8 lines. The distributor of record does not veto this: TD SYNNEX is the fulfillment partner on
+     nearly every line, including configured OEM builds (ruling 2026-09-22 after the first E0 build put 7,478 of
+     10,000 quoted opportunities in à la carte).
+   - mixed if configured and at least one further line has no fingerprint and belongs to a manufacturer other than
+     the configured one(s);
+   - à la carte if not configured and every line's partner is a distributor (TD SYNNEX, Ingram Micro, D&H, B&H);
+   - otherwise unlabeled.
+   Built 2026-09-22 over 6,472 quoted opportunities: 4,409 à la carte, 961 configured build, 320 mixed,
+   782 unlabeled. Observed on SEWP before the ruling: 184 explicit Cisco CCW, 1,627 OEM-heavy, 4,489 distributor-only. The proxy
+   rules are validated against 200 human-labeled hardware rows before they are trusted (E4); the ≥ 8-line OEM
+   heuristic is the part most likely to over-label large single-brand SKU orders.
 3. **Human gold**: 600 rows (200 per contract) drawn from the existing 12,000-row sample, stratified by Qwen
    subclass so rare subclasses are represented, labeled in the review UI with the full Section 2 schema.
 4. **Disagreement set**: 300 rows where Jev's accepted answer and Qwen's mapped answer differ on `primary_class`
