@@ -21,3 +21,26 @@ def test_stratified_ids_covers_rare_subclasses_and_respects_per_vehicle():
     ids = stratified_ids(labels, sample, per_vehicle=20)
     assert len(ids) == 20
     assert sum(labels[i].components == ["Training"] for i in ids) >= 2
+
+def test_build_items_truncation_preserves_none():
+    sample = {"o1": {"id": "o1", "vehicle": "SEWP", "title": "a" * 600, "description": None, "lines": None, "attachment_text": "b" * 6000}}
+    items = build_items(["o1"], sample, {"qwen": {"o1": lab("General hardware")}}, "gold_sample")
+    assert len(items[0]["textBundle"]["title"]) == 500
+    assert items[0]["textBundle"]["description"] is None
+    assert items[0]["textBundle"]["lines"] is None
+    assert len(items[0]["textBundle"]["attachmentExcerpt"]) == 5000
+
+def test_stratified_ids_deterministic_vehicle_order():
+    sample, labels = {}, {}
+    for i in range(50):
+        sample[f"g{i}"] = {"id": f"g{i}", "vehicle": "GSA 2GIT"}
+        sample[f"s{i}"] = {"id": f"s{i}", "vehicle": "SEWP"}
+        labels[f"g{i}"] = lab("General hardware")
+        labels[f"s{i}"] = lab("General hardware")
+    ids1 = stratified_ids(labels, sample, per_vehicle=10, seed=42)
+    ids2 = stratified_ids(labels, sample, per_vehicle=10, seed=42)
+    assert ids1 == ids2
+    # GSA 2GIT < SEWP alphabetically, so GSA ids should appear first
+    gsa_indices = [ids1.index(i) for i in ids1 if i.startswith("g")]
+    sewp_indices = [ids1.index(i) for i in ids1 if i.startswith("s")]
+    assert max(gsa_indices) < min(sewp_indices)

@@ -12,20 +12,22 @@ import requests
 from . import common
 from .mapping import load_labels
 
-VEHICLES = ("SEWP", "GSA MAS", "GSA 2GIT")
+
+def _cap(value, n):
+    """Truncate string to n chars, preserve None."""
+    return value[:n] if isinstance(value, str) else None
 
 
 def build_items(ids, sample_by_id, labels_by_source, reason):
     items = []
     for i in ids:
         s = sample_by_id[i]
-        # Truncate textBundle fields to API limits: title 500, description 20000, lines 5000, attachmentExcerpt 5000
         text_bundle = {
             "vehicle": s.get("vehicle"),
-            "title": (s.get("title") or "")[:500],
-            "description": (s.get("description") or "")[:20000],
-            "lines": (s.get("lines") or "")[:5000] if s.get("lines") else None,
-            "attachmentExcerpt": (s.get("attachment_text") or "")[:5000],
+            "title": _cap(s.get("title"), 500),
+            "description": _cap(s.get("description"), 20000),
+            "lines": _cap(s.get("lines"), 5000),
+            "attachmentExcerpt": _cap(s.get("attachment_text"), 5000),
         }
         items.append({
             "opportunityId": i, "reason": reason,
@@ -45,7 +47,7 @@ def stratified_ids(labels, sample_by_id, per_vehicle, seed=1):
     for b in buckets.values():
         rng.shuffle(b)
     out = []
-    for veh in {v for v, _ in buckets}:
+    for veh in sorted({v for v, _ in buckets}):
         keys = sorted(k for k in buckets if k[0] == veh)
         picked = []
         while len(picked) < per_vehicle and any(buckets[k] for k in keys):
