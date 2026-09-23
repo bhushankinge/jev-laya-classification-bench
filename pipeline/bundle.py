@@ -49,24 +49,31 @@ FLAG_Q = {
 }
 
 
+def _slug(s: str) -> str:
+    """Question-key slug: the one spelling used by has_*, subclass_of_* and their readers."""
+    return re.sub(r"[^a-z]+", "_", s.lower()).strip("_")
+
+
+HAS_KEY = {s: "has_" + _slug(s) for s in SUBCLASSES}
+SUBCLASS_OF_KEY = {c: "subclass_of_" + _slug(c) for c in CLASSES}
+
+
 def questions(variant: str) -> dict:
     q = {"primary_class": {"type": "choice", "instructions": "Which class dominates what the government is buying?",
                            "criteria": CLASS_DEF}}
     if variant == "A":
         for s in SUBCLASSES:
-            q["has_" + re.sub(r"[^a-z]+", "_", s.lower()).strip("_")] = {
-                "type": "noul", "instructions": f"Does the solicitation include {SUBCLASS_DEF[s]}?"}
+            q[HAS_KEY[s]] = {"type": "noul", "instructions": f"Does the solicitation include {SUBCLASS_DEF[s]}?"}
     elif variant == "B":
         q["primary_subclass"] = {"type": "choice", "instructions": "Which component subclass dominates?", "criteria": SUBCLASS_DEF}
     elif variant == "C":
         for cls in CLASSES:
             subs = {s: SUBCLASS_DEF[s] for s, c in SUBCLASS_TO_CLASS.items() if c == cls}
             if len(subs) > 1:
-                q["subclass_of_" + re.sub(r"[^a-z]+", "_", cls.lower()).strip("_")] = {
+                q[SUBCLASS_OF_KEY[cls]] = {
                     "type": "choice", "instructions": f"If {cls} is present, which subclass?", "criteria": subs}
         for s in SUBCLASSES:
-            q["has_" + re.sub(r"[^a-z]+", "_", s.lower()).strip("_")] = {
-                "type": "noul", "instructions": f"Does the solicitation include {SUBCLASS_DEF[s]}?"}
+            q[HAS_KEY[s]] = {"type": "noul", "instructions": f"Does the solicitation include {SUBCLASS_DEF[s]}?"}
     else:
         raise ValueError(variant)
     q["lifecycle"] = {"type": "choice", "instructions": "Lifecycle of the dominant component", "criteria": LIFECYCLE_DEF}
@@ -75,9 +82,6 @@ def questions(variant: str) -> dict:
     for f, text in FLAG_Q.items():
         q[f] = {"type": "noul", "instructions": text}
     return q
-
-
-HAS_KEY = {s: "has_" + re.sub(r"[^a-z]+", "_", s.lower()).strip("_") for s in SUBCLASSES}
 
 
 def state(row: dict, variant: str) -> str:

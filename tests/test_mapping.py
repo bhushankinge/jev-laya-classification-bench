@@ -92,3 +92,42 @@ def test_load_labels_dedupes_by_latest_id():
             assert labels["x"].components == ["General hardware"]
         finally:
             common.LABELS_DIR = old_labels_dir
+
+
+def test_variant_c_takes_the_chosen_subclass_then_adds_nouls():
+    ans = {"primary_class": choice("Hardware", 0.9),
+           "subclass_of_hardware": choice("Consumables/Supplies", 0.8),
+           "subclass_of_software": choice("Perpetual license", 0.4),
+           "has_general_hardware": noul(0.3), "has_consumables_supplies": noul(0.95),
+           "has_support_maintenance_contract": noul(0.8),
+           "lifecycle": choice("new", 0.8), "domain": choice("printing/imaging", 0.7),
+           "fulfillment_mode": choice("à la carte", 0.6),
+           "rfi_market_research": noul(0.1), "text_insufficient": noul(0.1), "brand_name_only": noul(0.1)}
+    lab = map_typed(ans, "C", "jev")
+    # chosen subclass leads, nouls add, no duplicate for the subclass that is both
+    assert lab.components == ["Consumables/Supplies", "Support/Maintenance contract"]
+    assert lab.fulfillment_mode == "à la carte"        # consumables are hardware
+
+
+def test_load_labels_skips_unmappable_rows(tmp_path, capsys):
+    old = common.LABELS_DIR
+    common.LABELS_DIR = tmp_path
+    try:
+        (tmp_path / "jev").mkdir()
+        with open(tmp_path / "jev" / "A-run.jsonl", "w") as f:
+            f.write(json.dumps({"id": "bad", "answers": {"primary_class": choice("Hardware", 0.9)}}) + "\n")
+            f.write(json.dumps({"id": "ok", "answers": {
+                "primary_class": choice("Hardware", 0.9), "has_general_hardware": noul(0.9),
+                "lifecycle": choice("new", 0.8), "domain": choice("networking", 0.8),
+                "fulfillment_mode": choice("à la carte", 0.7), "rfi_market_research": noul(0.1),
+                "text_insufficient": noul(0.1), "brand_name_only": noul(0.1)}}) + "\n")
+        labels = load_labels("jev", "A-run")
+        assert list(labels) == ["ok"]
+        assert "skipped 1" in capsys.readouterr().err
+    finally:
+        common.LABELS_DIR = old
+
+
+def test_load_labels_rejects_a_run_name_without_a_variant():
+    with pytest.raises(AssertionError):
+        load_labels("jev", "smoke-S2")
