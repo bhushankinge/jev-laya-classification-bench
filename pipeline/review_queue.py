@@ -1,0 +1,111 @@
+"""Push rows to the CRM Classification Review queue and pull verdicts back as human gold.
+
+    python3 -m pipeline.review_queue enqueue --run gold-2026-09 --reason gold_sample --per-vehicle 200 \
+        --qwen v2 --jev A-S2 --laya A-S2 --token-file ~/.crm-review-token --base https://<crm-host>
+    python3 -m pipeline.review_queue pull --run gold-2026-09 --token-file ~/.crm-review-token --base https://<crm-host>
+"""
+import argparse, random, sys
+from collections import defaultdict
+from datetime import date
+from pathlib import Path
+import requests
+from . import common
+from .mapping import load_labels
+
+VEHICLES = ("SEWP", "GSA MAS", "GSA 2GIT")
+
+
+def build_items(ids, sample_by_id, labels_by_source, reason):
+    items = []
+    for i in ids:
+        s = sample_by_id[i]
+        # Truncate textBundle fields to API limits: title 500, description 20000, lines 5000, attachmentExcerpt 5000
+        text_bundle = {
+            "vehicle": s.get("vehicle"),
+            "title": (s.get("title") or "")[:500],
+            "description": (s.get("description") or "")[:20000],
+            "lines": (s.get("lines") or "")[:5000] if s.get("lines") else None,
+            "attachmentExcerpt": (s.get("attachment_text") or "")[:5000],
+        }
+        items.append({
+            "opportunityId": i, "reason": reason,
+            "textBundle": text_bundle,
+            "proposals": {src: labs[i].to_dict() for src, labs in labels_by_source.items() if i in labs},
+        })
+    return items
+
+
+def stratified_ids(labels, sample_by_id, per_vehicle, seed=1):
+    """Round-robin over (vehicle, first component subclass) so rare subclasses are represented."""
+    rng = random.Random(seed)
+    buckets = defaultdict(list)
+    for i, l in labels.items():
+        if i in sample_by_id:
+            buckets[(sample_by_id[i]["vehicle"], l.components[0])].append(i)
+    for b in buckets.values():
+        rng.shuffle(b)
+    out = []
+    for veh in {v for v, _ in buckets}:
+        keys = sorted(k for k in buckets if k[0] == veh)
+        picked = []
+        while len(picked) < per_vehicle and any(buckets[k] for k in keys):
+            for k in keys:
+                if buckets[k] and len(picked) < per_vehicle:
+                    picked.append(buckets[k].pop())
+        out.extend(picked)
+    return out
+
+
+def disagreement_ids(jev, qwen, limit, seed=1):
+    ids = [i for i in jev if i in qwen and (jev[i].primary_class != qwen[i].primary_class or set(jev[i].components) != set(qwen[i].components))]
+    random.Random(seed).shuffle(ids)
+    return ids[:limit]
+
+
+def _headers(token_file):
+    return {"Authorization": f"Bearer {Path(token_file).expanduser().read_text().strip()}"}
+
+
+def enqueue(base, token_file, run, reason, items):
+    created = skipped = 0
+    for k in range(0, len(items), 100):
+        r = requests.post(f"{base}/api/classification-reviews/enqueue", json={"runId": run, "items": items[k:k + 100]},
+                          headers=_headers(token_file), timeout=60)
+        r.raise_for_status()
+        d = r.json()["data"]; created += d["created"]; skipped += d["skipped"]
+    print(f"enqueued {created}, skipped {skipped}", file=sys.stderr)
+
+
+def pull(base, token_file, run):
+    r = requests.get(f"{base}/api/classification-reviews/export", params={"runId": run, "status": "confirmed,corrected"},
+                     headers=_headers(token_file), timeout=120)
+    r.raise_for_status()
+    out = common.GOLD_DIR / f"human-{date.today().strftime('%Y%m%d')}.jsonl"
+    n = 0
+    for row in r.json()["data"]:
+        common.append_jsonl(out, {"id": row["opportunityId"], "verdict": row["verdict"], "reviewer_id": row["reviewerId"],
+                                  "reviewed_at": row["reviewedAt"], "reason": row["reason"], "run_id": row["runId"]})
+        n += 1
+    print(f"wrote {n} verdicts -> {out}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("cmd", choices=["enqueue", "pull"])
+    ap.add_argument("--run", required=True); ap.add_argument("--base", required=True); ap.add_argument("--token-file", required=True)
+    ap.add_argument("--reason", default="gold_sample", choices=["gold_sample", "disagreement", "fulfillment", "low_confidence"])
+    ap.add_argument("--per-vehicle", type=int, default=200); ap.add_argument("--limit", type=int, default=300)
+    ap.add_argument("--qwen", default="v2"); ap.add_argument("--jev"); ap.add_argument("--laya")
+    a = ap.parse_args()
+    if a.cmd == "pull":
+        pull(a.base, a.token_file, a.run); sys.exit()
+    sample = {r["id"]: r for r in common.read_jsonl(common.SAMPLE)}
+    labels = {k: load_labels(k, v) for k, v in (("qwen", a.qwen), ("jev", a.jev), ("laya", a.laya)) if v}
+    if a.reason == "disagreement":
+        ids = disagreement_ids(labels["jev"], labels["qwen"], a.limit)
+    elif a.reason == "fulfillment":
+        hw = {i: l for i, l in labels["qwen"].items() if l.fulfillment_mode != "not applicable"}
+        ids = stratified_ids(hw, sample, a.per_vehicle)
+    else:
+        ids = stratified_ids(labels["qwen"], sample, a.per_vehicle)
+    enqueue(a.base, a.token_file, a.run, a.reason, build_items(ids, sample, labels, a.reason))
