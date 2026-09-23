@@ -18,7 +18,19 @@ def _cap(value, n):
     return value[:n] if isinstance(value, str) else None
 
 
-def build_items(ids, sample_by_id, labels_by_source, reason):
+def blind_map(ids, sources=("jev", "qwen"), seed=1):
+    """{id: {"A": source, "B": source}} - the per-row key shuffle for blind review, so a reviewer
+    cannot learn which model sits behind which proposal from its position."""
+    rng = random.Random(seed)
+    out = {}
+    for i in ids:
+        s = list(sources)
+        rng.shuffle(s)
+        out[i] = dict(zip(("A", "B"), s))
+    return out
+
+
+def build_items(ids, sample_by_id, labels_by_source, reason, keymap=None):
     items = []
     for i in ids:
         s = sample_by_id[i]
@@ -29,11 +41,10 @@ def build_items(ids, sample_by_id, labels_by_source, reason):
             "lines": _cap(s.get("lines"), 5000),
             "attachmentExcerpt": _cap(s.get("attachment_text"), 5000),
         }
-        items.append({
-            "opportunityId": i, "reason": reason,
-            "textBundle": text_bundle,
-            "proposals": {src: labs[i].to_dict() for src, labs in labels_by_source.items() if i in labs},
-        })
+        proposals = {src: labs[i].to_dict() for src, labs in labels_by_source.items() if i in labs}
+        if keymap and i in keymap:
+            proposals = {k: dict(proposals[src], source=k) for k, src in keymap[i].items() if src in proposals}
+        items.append({"opportunityId": i, "reason": reason, "textBundle": text_bundle, "proposals": proposals})
     return items
 
 
@@ -59,9 +70,17 @@ def stratified_ids(labels, sample_by_id, per_vehicle, seed=1):
 
 
 def disagreement_ids(jev, qwen, limit, seed=1):
-    ids = [i for i in jev if i in qwen and (jev[i].primary_class != qwen[i].primary_class or set(jev[i].components) != set(qwen[i].components))]
-    random.Random(seed).shuffle(ids)
-    return ids[:limit]
+    """Half the budget on rows where the two models pick different classes, half on rows that agree
+    on the class but not on the component set; either stratum fills the other's shortfall. Class
+    disagreements are the loud ones and would otherwise take the whole queue."""
+    shared = [i for i in jev if i in qwen]
+    cls = [i for i in shared if jev[i].primary_class != qwen[i].primary_class]
+    comp = [i for i in shared if jev[i].primary_class == qwen[i].primary_class
+            and set(jev[i].components) != set(qwen[i].components)]
+    rng = random.Random(seed)
+    rng.shuffle(cls); rng.shuffle(comp)
+    n_cls = min(len(cls), max(limit // 2, limit - len(comp)))
+    return cls[:n_cls] + comp[:limit - n_cls]
 
 
 def _headers(token_file):
@@ -83,10 +102,14 @@ def pull(base, token_file, run):
                      headers=_headers(token_file), timeout=120)
     r.raise_for_status()
     out = common.GOLD_DIR / f"human-{date.today().strftime('%Y%m%d')}.jsonl"
+    # verdicts are model-agnostic, so nothing needs de-anonymizing; the gold row just records
+    # where the A/B key map lives, for anyone scoring per model later.
+    blind = common.GOLD_DIR / f"blind-{run}.jsonl"
     n = 0
     for row in r.json()["data"]:
         common.append_jsonl(out, {"id": row["opportunityId"], "verdict": row["verdict"], "reviewer_id": row["reviewerId"],
-                                  "reviewed_at": row["reviewedAt"], "reason": row["reason"], "run_id": row["runId"]})
+                                  "reviewed_at": row["reviewedAt"], "reason": row["reason"], "run_id": row["runId"],
+                                  "blind_map": str(blind) if blind.exists() else None})
         n += 1
     print(f"wrote {n} verdicts -> {out}", file=sys.stderr)
 
@@ -98,16 +121,23 @@ if __name__ == "__main__":
     ap.add_argument("--reason", default="gold_sample", choices=["gold_sample", "disagreement", "fulfillment", "low_confidence"])
     ap.add_argument("--per-vehicle", type=int, default=200); ap.add_argument("--limit", type=int, default=300)
     ap.add_argument("--qwen", default="v2"); ap.add_argument("--jev"); ap.add_argument("--laya")
+    ap.add_argument("--seed", type=int, default=1)
     a = ap.parse_args()
     if a.cmd == "pull":
         pull(a.base, a.token_file, a.run); sys.exit()
     sample = {r["id"]: r for r in common.read_jsonl(common.SAMPLE)}
     labels = {k: load_labels(k, v) for k, v in (("qwen", a.qwen), ("jev", a.jev), ("laya", a.laya)) if v}
+    keymap = None
     if a.reason == "disagreement":
-        ids = disagreement_ids(labels["jev"], labels["qwen"], a.limit)
+        ids = disagreement_ids(labels["jev"], labels["qwen"], a.limit, a.seed)
+        keymap = blind_map(ids, ("jev", "qwen"), a.seed)
+        blind_path = common.GOLD_DIR / f"blind-{a.run}.jsonl"
+        for i in ids:
+            common.append_jsonl(blind_path, {"id": i, **keymap[i]})
+        print(f"blind key map -> {blind_path}", file=sys.stderr)
     elif a.reason == "fulfillment":
         hw = {i: l for i, l in labels["qwen"].items() if l.fulfillment_mode != "not applicable"}
-        ids = stratified_ids(hw, sample, a.per_vehicle)
+        ids = stratified_ids(hw, sample, a.per_vehicle, a.seed)
     else:
-        ids = stratified_ids(labels["qwen"], sample, a.per_vehicle)
-    enqueue(a.base, a.token_file, a.run, a.reason, build_items(ids, sample, labels, a.reason))
+        ids = stratified_ids(labels["qwen"], sample, a.per_vehicle, a.seed)
+    enqueue(a.base, a.token_file, a.run, a.reason, build_items(ids, sample, labels, a.reason, keymap))
