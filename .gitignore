@@ -7,3 +7,7 @@ __pycache__/
 Federal_Opportunity_Classification_Report.pdf
 Federal_Opportunity_Classification_Report.docx
 report_assets/
+labels/
+results/**/*.png
+results/**/report.html
+classification_report_data.json
