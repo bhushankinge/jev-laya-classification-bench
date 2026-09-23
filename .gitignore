@@ -11,3 +11,4 @@ labels/
 results/**/*.png
 results/**/report.html
 classification_report_data.json
+results/**/*.log
