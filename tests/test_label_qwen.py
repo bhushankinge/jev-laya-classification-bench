@@ -10,3 +10,10 @@ def test_schema_has_fulfillment_and_flags():
     for k in ("fulfillment_mode", "rfi_market_research", "text_insufficient"):
         assert k in qc.SCHEMA["required"]
     assert "configured build" in qc.SYSTEM
+
+
+def test_concurrency_clamped_at_48(monkeypatch):
+    monkeypatch.setenv("CONC", "200")
+    spec = importlib.util.spec_from_file_location("qc_clamped", pathlib.Path("qwen_discovery/qwen_classify.py"))
+    qc_clamped = importlib.util.module_from_spec(spec); spec.loader.exec_module(qc_clamped)
+    assert qc_clamped.CONCURRENCY == 48

@@ -22,7 +22,7 @@ VEHICLES = {"SEWP": 6000, "GSA MAS": 3000, "GSA 2GIT": 3000}
 ENDPOINT = ("https://<qwen-endpoint>"
             ".example.internal/v1/chat/completions")
 MODEL = "Qwen/Qwen3.5-35B-A3B-FP8"
-CONCURRENCY = int(os.environ.get("CONC", "48"))
+CONCURRENCY = min(int(os.environ.get("CONC", "48")), 48)  # shared prod endpoint: hard ceiling
 
 KINDS = ["physical product", "software license (perpetual)", "software subscription/SaaS",
          "cloud/hosting service", "support/maintenance contract", "warranty/extended warranty",
