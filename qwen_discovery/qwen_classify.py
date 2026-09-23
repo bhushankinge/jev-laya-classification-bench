@@ -17,12 +17,12 @@ import psycopg2, psycopg2.extras, requests
 
 HERE = Path(__file__).resolve().parent
 SAMPLE = HERE / "sample.jsonl"
-LABELS = HERE / "labels.jsonl"
+LABELS = Path(os.environ.get("QWEN_LABELS", HERE / "labels.jsonl"))
 VEHICLES = {"SEWP": 6000, "GSA MAS": 3000, "GSA 2GIT": 3000}
 ENDPOINT = ("https://<qwen-endpoint>"
             ".example.internal/v1/chat/completions")
 MODEL = "Qwen/Qwen3.5-35B-A3B-FP8"
-CONCURRENCY = int(os.environ.get("CONC", "8"))
+CONCURRENCY = int(os.environ.get("CONC", "48"))
 
 KINDS = ["physical product", "software license (perpetual)", "software subscription/SaaS",
          "cloud/hosting service", "support/maintenance contract", "warranty/extended warranty",
@@ -53,8 +53,12 @@ SCHEMA = {
         "brand_name_only": {"type": "boolean"},
         "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
         "unusual": {"type": ["string", "null"], "maxLength": 120},
+        "fulfillment_mode": {"type": "string", "enum": ["à la carte", "configured build", "mixed", "not applicable"]},
+        "rfi_market_research": {"type": "boolean"},
+        "text_insufficient": {"type": "boolean"},
     },
-    "required": ["components", "primary_index", "brand_name_only", "confidence", "unusual"],
+    "required": ["components", "primary_index", "brand_name_only", "confidence", "unusual",
+                 "fulfillment_mode", "rfi_market_research", "text_insufficient"],
     "additionalProperties": False,
 }
 
@@ -72,6 +76,9 @@ Rules:
 - `brand_name_only`: true if the solicitation restricts to a specific brand / no substitutes.
 - `unusual`: anything the buyer wants that does NOT fit the kind list well (else null). Be specific.
 - `confidence`: how sure you are given the text quality.
+- `fulfillment_mode` (hardware only, else "not applicable"): "à la carte" when every hardware item is an orderable SKU a reseller adds from a distributor or catalog; "configured build" when at least one item must be configured in an OEM portal (Cisco CCW, HPE OCA/iQuote, Dell Premier, NetApp, Pure) so price depends on configuration and human input; "mixed" when both.
+- `rfi_market_research`: true if this is an RFI, sources sought or market research rather than a purchase.
+- `text_insufficient`: true if the text does not say what is bought and only points to an attachment, BOM or spreadsheet.
 Return only JSON matching the schema."""
 
 
