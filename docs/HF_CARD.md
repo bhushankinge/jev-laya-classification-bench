@@ -14,9 +14,6 @@ tags:
   - qwen
 size_categories:
   - n<1K
-configs:
-  - config_name: default
-    data_files: "results/**/metrics.json"
 ---
 
 # Jev / Laya / Qwen classification bench results

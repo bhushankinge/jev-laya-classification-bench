@@ -26,7 +26,6 @@ CLASSES = ["Hardware", "Software", "Maintenance & Support", "Services",
            "Installation & Integration", "Furniture / Facilities", "Other"]
 SHORT = ["Hardware", "Software", "Maint. & Support", "Services", "Install. & Integ.", "Furniture", "Other"]
 MIN_CURVE_N = 20         # curve points below this many accepted rows are noise (Laya's first point is n=1)
-JEV_COST_12K = "$0.78"   # results/e5-cost.md: Jev list price for all 12,000 rows
 THEMES = {
     "light": {"surface": "#ffffff", "text": "#0b0b0b", "muted": "#52514e", "grid": "#e6e5e1",
               "jev": "#2a78d6", "qwen": "#eb6834", "laya": "#1baf7a",
@@ -250,21 +249,23 @@ def gate(t, e2, e1):
 
 def social_preview(e2, out):
     t = THEMES["light"]
-    v = hero_values(e2)["jev"]
-    n = paired(e2, "jev", "primary_vs_quote_gold")["n"]
+    v = hero_values(e2)
+    n_p = paired(e2, "jev", "primary_vs_quote_gold")["n"]
+    n_f = paired(e2, "jev", "fulfillment_vs_quote_gold")["n"]
     fig = plt.figure(figsize=(12.8, 6.4), dpi=100, facecolor=t["surface"])
     fig.text(0.05, 0.88, "jev-laya-classification-bench", fontsize=15, color=t["muted"], family="monospace")
     fig.text(0.05, 0.64, "Typed-decision models vs a 35B LLM\non 12,000 federal IT solicitations",
-             fontsize=22, fontweight="bold", color=t["text"], va="bottom", linespacing=1.25)
+             fontsize=21, fontweight="bold", color=t["text"], va="bottom", linespacing=1.25)
     fig.text(0.05, 0.56, "Graded against what a reseller actually quoted.", fontsize=15, color=t["muted"])
-    for i, line in enumerate([f"{v[0]:.1%} primary-class accuracy (Jev, n={n})",
-                              f"{v[1]:.1%} auto-accepted at ≥95% precision",
-                              f"{JEV_COST_12K} to label all 12,000 rows"]):
-        fig.text(0.05, 0.40 - i * 0.08, line, fontsize=15, color=t["text"])
-    ax = fig.add_axes([0.62, 0.24, 0.34, 0.58])
-    draw_hero(ax, t, e2, groups=2)
+    for i, line in enumerate([f"Primary class (n={n_p}): Jev {v['jev'][0]:.1%} · Qwen {v['qwen'][0]:.1%} · Laya {v['laya'][0]:.1%}",
+                              f"Only Jev reaches a 95%-precision gate ({v['jev'][1]:.1%} auto-accepted)",
+                              f"Fulfillment mode (n={n_f}): at most {max(x[2] for x in v.values()):.0%} for every model"]):
+        fig.text(0.05, 0.40 - i * 0.08, line, fontsize=13, color=t["text"])
+    ax = fig.add_axes([0.575, 0.27, 0.40, 0.55])
+    draw_hero(ax, t, e2)
+    ax.set_xticks(range(3), [f"Primary class\n(n={n_p})", "Auto-accepted at\n≥95% precision", f"Fulfillment\n(n={n_f})"])
     ax.legend(frameon=False, labelcolor=t["text"], fontsize=10, loc="upper center",
-              bbox_to_anchor=(0.5, -0.17), ncol=3)
+              bbox_to_anchor=(0.5, -0.2), ncol=3)
     path = Path(out) / "social_preview.png"
     fig.savefig(path, dpi=100, facecolor=t["surface"])
     plt.close(fig)

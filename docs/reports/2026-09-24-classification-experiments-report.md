@@ -36,7 +36,7 @@ Ground truth for the top-level class came from the reseller's own quotes: when a
 Findings that matter:
 
 1. **Jev beats the 35B LLM by 2.3 points on the top-level class and is the only source whose confidence supports an auto-accept gate.** At a 0.94 cutoff it accepts 86.5 percent of rows at a Wilson-bounded 95 percent precision (observed 96.7 percent).
-2. **All nine Jev question and state-text variants land within four rows of each other (0.912 to 0.919 on 741).** Adding line items, adding a 1,500-character attachment excerpt, hierarchical questions, or a 12-way subclass choice changed nothing measurable. The cheapest adequate variant (A-S2) won on the pre-registered tie-break.
+2. **All nine Jev question and state-text variants land within five rows of each other (0.912 to 0.919 on 741).** Adding line items, adding a 1,500-character attachment excerpt, hierarchical questions, or a 12-way subclass choice changed nothing measurable. The cheapest adequate variant (A-S2) won on the pre-registered tie-break.
 3. **Fulfillment mode is the weak spot for every model:** 0.65 (Jev), 0.71 (Qwen), 0.46 (Laya) against quote gold, with configured-build precision 0.25 to 0.36. The 90 percent target is far away. This is the question whose answer usually lives inside a BOM or configurator quote in an attachment, not in the notice text.
 4. **Laya, as shipped, is not competitive on this task at 0.78,** and its calibration is poor (ECE 0.32, median primary confidence 0.41). Section 9 analyzes why: over-firing presence questions (4.05 components per row vs 1.95 for Jev), flags firing on 63 to 71 percent of rows, length sensitivity that begins well before the 512-token window is full, and a head-budget rule in the sequence packer that truncates the class definitions the questions rely on. These are the concrete, reproducible items for a community contribution.
 5. **The `brand_name_only` flag fires on 54 percent of rows (Jev) and 39 percent (Qwen).** The spec's "always queue when any flag is true" rule would cut auto-accept coverage from 92 percent to 27 percent for no precision gain. That flag should become an attribute, not a queue trigger.
@@ -325,7 +325,7 @@ Each Jev run took about 93 seconds at the 10 req/s cap. Jev input tokens barely 
 | A-S2 | Laya | 0.7800 | 0.322 | 705 | none | none | 0.457 | 0.113 | 0.687 / 0.763 / 0.563 |
 | v2 | Qwen | 0.8961 | n/a | 3 | none | none | 0.710 | 0.716 | 0.127 / 0.131 / 0.385 |
 
-**Winner: A-S2.** Three-way tie at 0.9190 (681 of 741) between A-S2, C-S2 and C-S3; A-S2 has the highest coverage at cutoff (0.865 vs 0.850 and 0.846). The full spread across nine variants is 676 to 681 correct rows: four rows.
+**Winner: A-S2.** Three-way tie at 0.9190 (681 of 741) between A-S2, C-S2 and C-S3; A-S2 has the highest coverage at cutoff (0.865 vs 0.850 and 0.846). The full spread across nine variants is 676 to 681 correct rows: five rows.
 
 Per-class precision / recall for Jev by variant (support: Hardware 568, Software 135, Maintenance & Support 32, Services 6):
 
@@ -425,7 +425,7 @@ Jev, selected cutoffs:
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="../figures/precision_coverage-dark.png">
-  <img alt="Precision versus coverage curves. Jev stays above the 95% precision line up to 86.5% coverage at cutoff 0.94. Qwen's three confidence buckets sit near 90%. Laya stays below 95% at every depth." src="../figures/precision_coverage-light.png">
+  <img alt="Precision versus coverage curves. Jev's Wilson lower bound stays at or above 95% from cutoff 1.0 down to 0.94, where 86.5% of rows are auto-accepted. Qwen's three confidence buckets sit near 90%. Laya's Wilson bound never reaches 95%." src="../figures/precision_coverage-light.png">
 </picture>
 
 0.94 is the deepest cutoff whose Wilson lower bound stays above 0.95 along the whole envelope. Jev sets confidence exactly 1.0 on 59.5 percent of all 12,000 rows and at least 0.94 on 77.7 percent; median 1.0, p10 0.72.
@@ -541,7 +541,7 @@ Rows are Jev's primary class, columns Qwen's mapped primary class:
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="../figures/agreement-dark.png">
-  <img alt="Confusion matrix of Jev versus Qwen primary class over 11,931 rows. Most mass is on the diagonal. The largest off-diagonal cells are Jev Hardware versus Qwen Other (155), Jev Software versus Qwen Maintenance and Support (80), and Jev Maintenance and Support versus Qwen Software (107)." src="../figures/agreement-light.png">
+  <img alt="Confusion matrix of Jev versus Qwen primary class over 11,931 rows. Most mass is on the diagonal. The largest off-diagonal cells are Jev Hardware versus Qwen Other (155), Jev Hardware versus Qwen Software (113) and Jev Maintenance and Support versus Qwen Software (107)." src="../figures/agreement-light.png">
 </picture>
 
 Agreement 91.0 percent (10,863 of 11,931). The disagreement mass is Hardware vs Other (Qwen calls "IT equipment per attached BOM" Other; Jev calls it Hardware), Support vs Software (both directions), and Services vs Software/Other. These 1,068 disagreements are the E3 pool; 300 of them go to blind human adjudication.

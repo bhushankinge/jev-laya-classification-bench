@@ -42,10 +42,10 @@ Every number: [`results/e2-full/metrics.json`](results/e2-full/metrics.json), ke
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/precision_coverage-dark.png">
-  <img alt="Precision versus coverage curves. Jev stays above the 95% precision line up to 86.5% coverage at cutoff 0.94. Qwen's three confidence buckets sit near 90%. Laya stays below 95% at every depth." src="docs/figures/precision_coverage-light.png">
+  <img alt="Precision versus coverage curves. Jev's Wilson lower bound stays at or above 95% from cutoff 1.0 down to 0.94, where 86.5% of rows are auto-accepted. Qwen's three confidence buckets sit near 90%. Laya's Wilson bound never reaches 95%." src="docs/figures/precision_coverage-light.png">
 </picture>
 
-Jev's confidence is calibrated (ECE 0.049). At a cutoff of 0.94 it accepts 86.5% of rows with observed precision 96.7%, and the Wilson 95% lower bound stays above 95% along the whole curve. Qwen reports three confidence levels by prompt design; its "high" bucket covers 97.8% of rows at 90.1% precision, so no bucket reaches 95%. Laya's precision never clears the bound at any depth.
+Jev's confidence is calibrated (ECE 0.049). At a cutoff of 0.94 it accepts 86.5% of rows with observed precision 96.7%, and the Wilson 95% lower bound stays at or above 95% at every cutoff from 1.0 down to 0.94. Qwen reports three confidence levels by prompt design; its "high" bucket covers 97.8% of rows at 90.1% precision, so no bucket reaches 95%. Laya's precision never clears the bound at any depth.
 
 ### 2. Prompt variants did not move accuracy
 
@@ -69,10 +69,10 @@ Telling distributor catalog SKUs ("à la carte") from OEM-configured builds tops
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/agreement-dark.png">
-  <img alt="Confusion matrix of Jev versus Qwen primary class over 11,931 rows. Most mass is on the diagonal. The largest off-diagonal cells are Jev Hardware versus Qwen Other (155), Jev Software versus Qwen Maintenance and Support (80), and Jev Maintenance and Support versus Qwen Software (107)." src="docs/figures/agreement-light.png">
+  <img alt="Confusion matrix of Jev versus Qwen primary class over 11,931 rows. Most mass is on the diagonal. The largest off-diagonal cells are Jev Hardware versus Qwen Other (155), Jev Hardware versus Qwen Software (113) and Jev Maintenance and Support versus Qwen Software (107)." src="docs/figures/agreement-light.png">
 </picture>
 
-The disagreements cluster in three places: Hardware vs Other (Qwen calls "IT equipment per attached BOM" Other), Software vs Maintenance & Support in both directions, and Services vs Software or Other. Those 1,068 rows are the pool for blind human adjudication.
+The disagreements cluster in four places: Hardware vs Other (Qwen calls "IT equipment per attached BOM" Other), Hardware vs Software, Software vs Maintenance & Support in both directions, and Services vs Software or Other. Those 1,068 rows are the pool for blind human adjudication.
 
 ### 5. One queueing rule decides how much gets automated
 
@@ -81,7 +81,7 @@ The disagreements cluster in three places: Hardware vs Other (Qwen calls "IT equ
   <img alt="Gate simulation on 12,000 rows. Flags recorded but not queued: 91.9% auto-accepted at 93.8% primary precision. Spec rule where any flag sends the row to review: 26.6% auto-accepted at 93.5% primary precision." src="docs/figures/gate-light.png">
 </picture>
 
-The design spec sent any row with a raised flag to human review. The `brand_name_only` flag fires on 54% of rows (Jev), so that rule automates 26.6% of volume. Recording flags as attributes instead automates 91.9% at the same primary precision (93.8% vs 93.5% on scored rows), and the review queue fills with genuine model disagreements instead.
+The design spec sent any row with a raised flag to human review. The `brand_name_only` flag fires on 54% of rows (Jev), so that rule automates 26.6% of volume. Recording flags as attributes instead automates 91.9% at the same primary precision (93.8%, n=721, vs 93.5%, n=214 scored rows), and the review queue fills with genuine model disagreements instead.
 
 ## Cost and latency
 
@@ -99,8 +99,8 @@ Laya ran with shipped defaults: single row, default config, no threshold tuning,
 
 Observed, with evidence in [report section 9.4](docs/reports/2026-09-24-classification-experiments-report.md#94-laya-in-depth):
 
-- **Presence questions over-fire.** Laya emits 4.05 components per row against 1.95 for Jev; its three flag questions fire on 49% to 71% of rows where the discovery run found true RFI rates of 2% to 3%.
-- **Accuracy drops before the window fills.** 81.5% on states under 600 characters, 65.8% at 600 to 1,200 characters (roughly 150 to 300 tokens), inside the 512-token window.
+- **Presence questions over-fire.** Laya emits 4.05 components per row against 1.95 for Jev; its `rfi_market_research` and `text_insufficient` flags fire on 63% and 71% of rows (Jev 13% and 15%), where the discovery run found true RFI rates of 2% to 3%. Its `brand_name_only` rate (49%) is in line with the discovery run.
+- **Accuracy drops before the window fills.** 81.5% on states under 600 characters (n=519), 65.8% at 600 to 1,200 characters (n=117, roughly 150 to 300 tokens), inside the 512-token window. Longer states recover partly (72.9%, n=59; 74.0%, n=50); Jev and Qwen show no comparable drop.
 - **Class definitions are silently truncated.** The sequence packer caps the question head at 192 tokens. With seven options, each class definition is cut to 25 tokens, which drops the text that separates hardware from software.
 
 Hypotheses, none tested yet:
