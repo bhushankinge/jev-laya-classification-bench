@@ -10,13 +10,18 @@ from . import common, bundle
 MODEL_DIR = Path(common.env("LAYA_MODEL_DIR"))   # local copy of convaiinnovations/laya
 
 
-def run(variant, state_variant, limit=None, verify=False, ids_from=None, balanced=False):
+def run(variant, state_variant, limit=None, verify=False, ids_from=None, balanced=False,
+        model_dir=None, tag=None, dtype=None):
     if not common.SAMPLE.exists():
         raise SystemExit("sample missing: run python3 qwen_discovery/qwen_classify.py 0 to build it")
+    import laya
     from laya import Agent  # bench venv only
-    agent = Agent(str(MODEL_DIR), device="cuda")
+    agent = Agent(str(model_dir or MODEL_DIR), device="cuda")
+    if dtype:                                   # override the checkpoint's amp_dtype (bf16 on cc >= 8)
+        import torch
+        agent.dtype = {"fp16": torch.float16, "bf16": torch.bfloat16}[dtype]
     rows = common.read_jsonl(common.SAMPLE)
-    out_path = common.LABELS_DIR / "laya" / f"{variant}-{state_variant}.jsonl"
+    out_path = common.LABELS_DIR / "laya" / f"{variant}-{state_variant}{'-' + tag if tag else ''}.jsonl"
     todo = common.select_rows(rows, limit, common.done_ids(out_path), ids_from, balanced)
     if verify:
         todo = todo[:3]
@@ -28,7 +33,8 @@ def run(variant, state_variant, limit=None, verify=False, ids_from=None, balance
         try:
             res = agent.predict(bundle.state(r, state_variant), q)
             out = {"id": r["id"], "model": "laya", "answers": res["answers"],
-                   "latency_ms": round((time.perf_counter() - t1) * 1e3, 1)}
+                   "latency_ms": round((time.perf_counter() - t1) * 1e3, 1),
+                   "laya": laya.__version__, "dtype": str(agent.dtype)}
         except Exception as e:  # noqa: BLE001
             out = {"id": r["id"], "error": repr(e)[:200]}
         if verify:
@@ -47,5 +53,8 @@ if __name__ == "__main__":
     ap.add_argument("--verify", action="store_true")
     ap.add_argument("--ids-from", help="jsonl whose ids the run is restricted to (e.g. a gold file)")
     ap.add_argument("--vehicle-balanced", action="store_true", help="interleave vehicles so --limit is not one vehicle")
+    ap.add_argument("--model-dir", help="checkpoint directory (default LAYA_MODEL_DIR)")
+    ap.add_argument("--tag", help="suffix for the output file: labels/laya/<variant>-<state>-<tag>.jsonl")
+    ap.add_argument("--dtype", choices=["fp16", "bf16"], help="force the CUDA autocast dtype")
     a = ap.parse_args()
-    run(a.variant, a.state, a.limit, a.verify, a.ids_from, a.vehicle_balanced)
+    run(a.variant, a.state, a.limit, a.verify, a.ids_from, a.vehicle_balanced, a.model_dir, a.tag, a.dtype)

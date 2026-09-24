@@ -21,7 +21,7 @@ Three model paths labeled the same 12,000 solicitations with the same question s
 | | What it is | Where it ran |
 |---|---|---|
 | **Jev** | TypeSafe System One API, model `jev-1.13.0`. Typed questions (choice / score / noul) with calibrated probabilities | TypeSafe cloud, 10 requests/s cap |
-| **Laya** | [`convaiinnovations/laya`](https://huggingface.co/convaiinnovations/laya), the 421M-parameter open-weights sibling of Jev (ModernBERT-large, 512-token window), shipped defaults | laptop RTX 2000 Ada 8 GB, eager FP16 |
+| **Laya** | [`convaiinnovations/laya`](https://huggingface.co/convaiinnovations/laya), the 421M-parameter open-weights sibling of Jev (ModernBERT-large, 512-token window), shipped defaults | laptop RTX 2000 Ada 8 GB, eager bf16 autocast (the checkpoint's default) |
 | **Qwen3.5-35B-A3B** | FP8 on vLLM behind a structured-JSON schema, the LLM already in production for this job | on-prem GPU cluster |
 
 Ground truth is behavioral, not annotated: when a sales rep quoted an opportunity, the product types on the quote lines say what it really was ([how the gold was built](#method)).
@@ -103,11 +103,11 @@ Observed, with evidence in [report section 9.4](docs/reports/2026-09-24-classifi
 - **Accuracy drops before the window fills.** 81.5% on states under 600 characters (n=519), 65.8% at 600 to 1,200 characters (n=117, roughly 150 to 300 tokens), inside the 512-token window. Longer states recover partly (72.9%, n=59; 74.0%, n=50); Jev and Qwen show no comparable drop.
 - **The state is truncated for the longest rows; the class definitions are not.** Measured with the Laya tokenizer (`python -m pipeline.head_budget`): the seven options of `primary_class` take 147 tokens with their markers against the 176 available (159 with the 12-token instruction), so no definition or instruction was cut (an earlier version of this README claimed 25-token cuts; that was an estimate and it was wrong). The head leaves 348 tokens, about 1,400 characters, for the state, so roughly the longest 13% of S2 states are cut for the class question. The 600 to 1,200-character bucket where accuracy first drops is never cut.
 
-Hypotheses, none tested yet:
+Hypotheses:
 
 1. Drop the line-item block for states over 1,400 characters so the class question sees the whole notice; measure on the same 741 rows.
 2. Record per-question state truncation (upstream PR #181 adds the flag) and re-bucket accuracy by cut vs whole instead of by character length.
-3. Run the `laya-typed-decisions` and `laya-multilingual` checkpoints on the same bundle.
+3. ~~Run the `laya-typed-decisions` and `laya-multilingual` checkpoints on the same bundle.~~ Done on upstream `main` @ 970dc8c (0.3.20): 0.619 and 0.675 against `laya`'s 0.780, which 0.3.20 reproduces to the row ([`results/e2-laya-head/breakdown.md`](results/e2-laya-head/breakdown.md)).
 4. Fit per-question noul thresholds or a temperature on a held-out slice instead of 0.5.
 5. Put the description first in the state and the vehicle and title lines last; test whether the drop at 150 to 300 tokens follows position rather than length.
 6. Control: send the class labels with no definitions. If accuracy is unchanged, the definitions are not being used.

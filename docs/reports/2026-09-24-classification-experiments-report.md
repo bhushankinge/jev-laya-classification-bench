@@ -15,7 +15,7 @@ Three model paths were compared on the same 12,000 opportunities using the same 
 | Path | What it is | Where it ran |
 |---|---|---|
 | **Jev** | TypeSafe System One API, model `jev-1.13.0`, typed decisions (choice / score / noul) with calibrated probabilities | TypeSafe cloud, 10 requests per second cap |
-| **Laya** | `convaiinnovations/laya` 421M English checkpoint (ModernBERT-large backbone, 512-token window), `laya` package 0.3.3, the open-weights sibling of Jev with the identical request schema | local NVIDIA RTX 2000 Ada laptop GPU, 8 GB, eager FP16 |
+| **Laya** | `convaiinnovations/laya` 421M English checkpoint (ModernBERT-large backbone, 512-token window), `laya` package 0.3.3, the open-weights sibling of Jev with the identical request schema | local NVIDIA RTX 2000 Ada laptop GPU, 8 GB, eager bf16 autocast (the checkpoint's `amp_dtype`) |
 | **Qwen** | Qwen3.5-35B-A3B-FP8 served by vLLM behind a structured-JSON schema, the LLM already in production for this job | on-prem HPE Private Cloud AI cluster |
 
 Ground truth for the top-level class came from the reseller's own quotes: when a rep quoted an opportunity, the product types on the quote lines say what it really was. Ground truth for fulfillment mode came from configurator fingerprints on quote lines.
@@ -221,7 +221,7 @@ Jev and Laya receive byte-identical bundles. Question-key slugs are shared (`has
 
 **Jev** (`pipeline/label_jev.py`). POST to the System One endpoint with `{"state", "questions", "model": "jev-latest"}`; served model reported as `jev-1.13.0`. Thread pool of 8, global rate cap 10 requests per second, 60 s timeout, three attempts with back-off, 429 handled by sleeping. A response missing any of `primary_class`, `lifecycle`, `domain`, `fulfillment_mode` is stored as an error row, never mapped. Resumable by id; error rows are retried on the next run; readers take the last row per id. Stores `usage.input_tokens`, `usage.output_tokens` and client latency. Output rows per question: `{"type": "choice", "choice": ..., "confidence": ..., "probabilities": {...}}` or `{"type": "noul", "noul": p}`.
 
-**Laya** (`pipeline/label_laya.py`). `laya.Agent(model_dir, device="cuda").predict(state, questions)` from the bench venv (`laya` 0.3.3, torch 2.14.0+cu130), single row at a time, eager FP16 autocast, on the RTX 2000 Ada 8 GB. Checkpoint `convaiinnovations/laya` at requested revision `c5d78730f3493e4fe16d61507ef4b78eef7318cf` (safetensors SHA256 `891102d3...`, pinned in the bench repository's `manifest.json`). Output per question adds `confidence` and `action.act_probability`; noul rows carry `noul` and `confidence`. The labeler did **not** store Laya's token usage (`n_tokens` is available from `system_one`); that is a gap for a future run.
+**Laya** (`pipeline/label_laya.py`). `laya.Agent(model_dir, device="cuda").predict(state, questions)` from the bench venv (`laya` 0.3.3, torch 2.14.0+cu130), single row at a time, eager bf16 autocast (laya picks the checkpoint's `amp_dtype`, bf16, on any GPU of compute capability 8 or higher; an earlier version of this report said FP16), on the RTX 2000 Ada 8 GB. Checkpoint `convaiinnovations/laya` at requested revision `c5d78730f3493e4fe16d61507ef4b78eef7318cf` (safetensors SHA256 `891102d3...`, pinned in the bench repository's `manifest.json`). Output per question adds `confidence` and `action.act_probability`; noul rows carry `noul` and `confidence`. The labeler did **not** store Laya's token usage (`n_tokens` is available from `system_one`); that is a gap for a future run.
 
 **Qwen** (`pipeline/label_qwen.py` wrapping `qwen_discovery/qwen_classify.py`). Qwen3.5-35B-A3B-FP8 via an OpenAI-compatible chat endpoint with `response_format: json_schema, strict: true`, temperature 0, max 600 output tokens. The prompt asks for a list of components (each with a free-text `what`, a `kind` from 12 values, `lifecycle`, `domain`, `brand`), a `primary_index`, `brand_name_only`, a 3-level `confidence`, an `unusual` escape hatch, and (v2 additions) `fulfillment_mode`, `rfi_market_research`, `text_insufficient`. Concurrency capped at 48; run at 16 during business hours. Rows whose JSON fails to parse are error rows and are retried on resume.
 
@@ -455,7 +455,7 @@ Label distributions over all 12,000 rows show the models' priors: Jev says confi
 
 This section is the material for a Laya community contribution. All numbers are from `labels/laya/A-S2.jsonl` over 12,000 rows unless stated.
 
-**Setup recap.** `laya` 0.3.3, checkpoint `convaiinnovations/laya` (421M English, ModernBERT-large, 512-token window), `Agent.predict` one row at a time, eager FP16 autocast on an RTX 2000 Ada 8 GB, 19-question variant A bundle identical to Jev's, S2 state text. Zero runtime errors on 12,927 rows across E1 and E2. Median latency 299 ms, p95 576 ms, 2.9 rows per second.
+**Setup recap.** `laya` 0.3.3, checkpoint `convaiinnovations/laya` (421M English, ModernBERT-large, 512-token window), `Agent.predict` one row at a time, eager bf16 autocast (the checkpoint default on this GPU; an earlier version said FP16) on an RTX 2000 Ada 8 GB, 19-question variant A bundle identical to Jev's, S2 state text. Zero runtime errors on 12,927 rows across E1 and E2. Median latency 299 ms, p95 576 ms, 2.9 rows per second.
 
 **Accuracy summary.** Primary class 0.780 (Jev 0.919, Qwen 0.896 on the same 741 rows). Laya agrees with Jev on the primary class on 71.9 percent of all 12,000 rows; Jev and Qwen agree on 91.0 percent.
 
@@ -520,10 +520,22 @@ Applied to this bundle:
 
 1. Drop the line-item block for states over 1,400 characters so the class question sees the whole notice; measure primary accuracy on the 741 rows.
 2. Record per-question state truncation (upstream PR #181 adds the flag) and re-bucket accuracy by cut vs whole instead of by character length.
-3. Try `laya-typed-decisions` and `laya-multilingual` checkpoints on the same bundle (downloaded and pinned in the bench repo, never run on this task).
+3. ~~Try `laya-typed-decisions` and `laya-multilingual` checkpoints on the same bundle.~~ Done 2026-09-24 (rerun table above): 0.619 and 0.675 against 0.780.
 4. Fit a per-question threshold for the nouls (or a temperature) on a held-out slice instead of 0.5; the over-firing pattern looks like a calibration offset.
 5. Put the description first in the state and the vehicle and title lines last; test whether the drop at 150 to 300 tokens follows position rather than length.
 6. Control: send the class labels with no definitions. If accuracy is unchanged, the definitions are not being used.
+
+**Rerun on upstream `main` @ 970dc8c (`laya` 0.3.20), 2026-09-24.** The 927 sample rows with quote gold were relabeled with the same bundle and state through `pipeline/label_laya.py --model-dir ... --tag ...` (upstream checkout on `PYTHONPATH`, `TORCH_DISABLE_NATIVE_JIT=1`), once per shipped checkpoint, plus the `laya` checkpoint under fp16 autocast. On the 741 paired rows (`results/e2-laya-head/breakdown.md`, per-run metrics in `results/e2-laya-head-*/metrics.json`):
+
+| Checkpoint | Autocast | Accuracy | ECE | Hardware called Software | under 600 | 600 to 1,200 | 1,200 to 2,000 | 2,000 to 3,000 | p50 ms |
+|---|---|---|---|---|---|---|---|---|---|
+| `laya` (0.3.3 run above) | bf16 | 0.780 | 0.322 | 103/568 | 0.817 | 0.655 | 0.729 | 0.750 | 299 |
+| `laya` | bf16 (default) | 0.780 | 0.322 | 103/568 | 0.817 | 0.655 | 0.729 | 0.750 | 289 |
+| `laya` | fp16 | 0.779 | 0.322 | 104/568 | 0.815 | 0.655 | 0.729 | 0.750 | 292 |
+| `laya-typed-decisions` | bf16 | 0.619 | 0.422 | 191/568 | 0.633 | 0.578 | 0.610 | 0.583 | 286 |
+| `laya-multilingual` | bf16 | 0.675 | 0.253 | 30/568 | 0.701 | 0.612 | 0.610 | 0.625 | 118 |
+
+The 0.3.20 run reproduces 0.3.3 to the row, so the numbers in this section are not a version artefact; fp16 moves one row. Hypothesis 3 below is therefore answered: the two 1,024-token checkpoints are lower on this task. `laya-typed-decisions` calls 191 hardware rows "Software" and answers "configured build" for fulfillment on 48 percent of rows; `laya-multilingual` almost stops confusing hardware with software but answers "not applicable" for fulfillment on 87 percent of rows (fulfillment accuracy 0.044), fires `has_general_hardware` on 85 percent and emits 6.0 components per row. Id-free per-case rows (vehicle, state length, gold, prediction, per-option probabilities) for the 741 rows and every run are in `results/e2-laya-head/per_case/`.
 
 ### 9.5 Jev vs Qwen agreement over 11,931 rows
 
