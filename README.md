@@ -1,4 +1,4 @@
-# laya-jev-classification-bench
+# jev-laya-classification-bench
 
 Typed-decision models versus an LLM on a real classification job: **Jev** (TypeSafe System One API), **Laya** (its open-weights sibling, `convaiinnovations/laya`, run locally) and **Qwen3.5-35B-A3B** classify 12,000 U.S. federal IT solicitations, graded against what a reseller actually quoted.
 
@@ -49,3 +49,7 @@ python3 -m pipeline.report --run e2
 ## Status
 
 E0 to E2 and E5 complete. E3 and E4 (human adjudication of disagreements, fulfillment validation) wait on hosting the review page. Companion repository: the Laya CUDA capacity bench (decisions per second under p99 SLOs on four NVIDIA GPUs), published separately.
+
+## License
+
+Apache-2.0. Copyright 2026 Bhushan Kinge.
