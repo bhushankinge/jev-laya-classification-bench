@@ -28,6 +28,11 @@ Ground truth for the top-level class came from the reseller's own quotes: when a
 | Qwen v2 | 0.896 | n/a (3 confidence buckets) | not reachable | none | **0.710** |
 | Laya A-S2 | 0.780 | 0.322 | not reachable | none | 0.457 |
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../figures/hero-dark.png">
+  <img alt="Grouped bar chart on 741 opportunities with quote gold. Primary-class accuracy: Jev 91.9%, Qwen3.5-35B 89.6%, Laya 78.0%. Share auto-accepted at 95% precision: Jev 86.5%, Qwen and Laya not reached. Fulfillment-mode accuracy on 634 rows: Jev 65.0%, Qwen 71.0%, Laya 45.7%." src="../figures/hero-light.png">
+</picture>
+
 Findings that matter:
 
 1. **Jev beats the 35B LLM by 2.3 points on the top-level class and is the only source whose confidence supports an auto-accept gate.** At a 0.94 cutoff it accepts 86.5 percent of rows at a Wilson-bounded 95 percent precision (observed 96.7 percent).
@@ -336,6 +341,11 @@ Per-class precision / recall for Jev by variant (support: Hardware 568, Software
 | C-S2 | 0.984 / 0.960 | 0.873 / 0.815 | 0.535 / 0.719 | 0.750 / 0.500 |
 | C-S3 | 0.982 / 0.963 | 0.871 / 0.800 | 0.511 / 0.719 | 0.750 / 0.500 |
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../figures/e1_variants-dark.png">
+  <img alt="Dot plot of nine Jev variants with 95% Wilson intervals. All sit between 91.2% and 91.9% with overlapping intervals. Reference lines mark Qwen at 89.6% and Laya at 78.0%." src="../figures/e1_variants-light.png">
+</picture>
+
 ### 8.3 What E1 says
 
 - **Input richness did not matter at these caps.** S3's attachment excerpt (first 1,500 characters of three RAG chunks, present on 5.6 percent of rows) changed accuracy by at most 0.3 points in either direction. Given Jev's 32k-token state limit, the untested question is whether a *much* larger or better-targeted excerpt helps; the tested one does not.
@@ -413,6 +423,11 @@ Jev, selected cutoffs:
 | 0.50 | 0.924 | 0.981 | 727 |
 | 0.21 (all) | 0.919 | 1.000 | 741 |
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../figures/precision_coverage-dark.png">
+  <img alt="Precision versus coverage curves. Jev stays above the 95% precision line up to 86.5% coverage at cutoff 0.94. Qwen's three confidence buckets sit near 90%. Laya stays below 95% at every depth." src="../figures/precision_coverage-light.png">
+</picture>
+
 0.94 is the deepest cutoff whose Wilson lower bound stays above 0.95 along the whole envelope. Jev sets confidence exactly 1.0 on 59.5 percent of all 12,000 rows and at least 0.94 on 77.7 percent; median 1.0, p10 0.72.
 
 Qwen: three buckets; "high" covers 97.8 percent of rows at 0.901 precision, so no bucket reaches 95 percent. Laya: 705 distinct confidences but precision never clears the Wilson bound at any depth; its median primary confidence is 0.41 (p10 0.17, p90 0.79), and only 2.8 percent of rows reach 0.94.
@@ -424,6 +439,11 @@ Qwen: three buckets; "high" covers 97.8 percent of rows at 0.901 precision, so n
 | Jev | 634 | 0.650 | 0.125 | 0.95 | 0.312 | 0.837 / 0.741 | 0.254 / 0.356 | 0.062 / 0.037 |
 | Qwen | 634 | 0.710 | n/a | none | | 0.893 / 0.794 | 0.361 / 0.475 | 0.000 / 0.000 |
 | Laya | 634 | 0.457 | 0.412 | none | | 0.823 / 0.551 | 0.190 / 0.109 | 0.000 / 0.000 |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../figures/per_class_f1-dark.png">
+  <img alt="Per-class F1 bars. Hardware F1 is high for all three sources. Configured-build F1 is 0.30 for Jev, 0.41 for Qwen and 0.14 for Laya; mixed is near zero for all." src="../figures/per_class_f1-light.png">
+</picture>
 
 Jev fulfillment curve: at confidence 1.0, precision 0.989 on 91 rows (14 percent coverage); at 0.95, 0.944 on 198 rows (31 percent); at 0.80, 0.848 on 322 rows (51 percent); at 0.50, 0.721 on 498 rows.
 
@@ -437,7 +457,7 @@ This section is the material for a Laya community contribution. All numbers are 
 
 **Setup recap.** `laya` 0.3.3, checkpoint `convaiinnovations/laya` (421M English, ModernBERT-large, 512-token window), `Agent.predict` one row at a time, eager FP16 autocast on an RTX 2000 Ada 8 GB, 19-question variant A bundle identical to Jev's, S2 state text. Zero runtime errors on 12,927 rows across E1 and E2. Median latency 299 ms, p95 576 ms, 2.9 rows per second.
 
-**Accuracy summary.** Primary class 0.780 (Jev 0.919, Qwen 0.896 on the same 741 rows). Laya agrees with Jev on the primary class on 71.9 percent of all 12,000 rows; Jev and Qwen agree on 91.1 percent.
+**Accuracy summary.** Primary class 0.780 (Jev 0.919, Qwen 0.896 on the same 741 rows). Laya agrees with Jev on the primary class on 71.9 percent of all 12,000 rows; Jev and Qwen agree on 91.0 percent.
 
 **Accuracy by state length (characters of S2 text; rows with single-class gold):**
 
@@ -519,7 +539,12 @@ Rows are Jev's primary class, columns Qwen's mapped primary class:
 | Other (229) | 91 | 10 | 2 | 6 | 0 | 3 | 117 |
 | Install. & Integ. (91) | 22 | 2 | 0 | 30 | 32 | 0 | 5 |
 
-Agreement 91.1 percent. The disagreement mass is Hardware vs Other (Qwen calls "IT equipment per attached BOM" Other; Jev calls it Hardware), Support vs Software (both directions), and Services vs Software/Other. These 1,068 disagreements are the E3 pool; 300 of them go to blind human adjudication.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../figures/agreement-dark.png">
+  <img alt="Confusion matrix of Jev versus Qwen primary class over 11,931 rows. Most mass is on the diagonal. The largest off-diagonal cells are Jev Hardware versus Qwen Other (155), Jev Software versus Qwen Maintenance and Support (80), and Jev Maintenance and Support versus Qwen Software (107)." src="../figures/agreement-light.png">
+</picture>
+
+Agreement 91.0 percent (10,863 of 11,931). The disagreement mass is Hardware vs Other (Qwen calls "IT equipment per attached BOM" Other; Jev calls it Hardware), Support vs Software (both directions), and Services vs Software/Other. These 1,068 disagreements are the E3 pool; 300 of them go to blind human adjudication.
 
 ### 9.6 Gate simulation (12,000 rows, cutoff 0.94, Qwen agreement required)
 
@@ -527,6 +552,11 @@ Agreement 91.1 percent. The disagreement mass is Hardware vs Other (Qwen calls "
 |---|---|---|---|---|---|---|---|---|
 | Flags always queue (spec) | **0.266** | 3,195 | 8,805 | 8,658 | 2 | 145 | 0.935 (214) | 0.702 (191) |
 | Flags recorded, not queued | **0.919** | 11,025 | 975 | 230 | 22 | 723 | 0.938 (721) | 0.653 (623) |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../figures/gate-dark.png">
+  <img alt="Gate simulation on 12,000 rows. Flags recorded but not queued: 91.9% auto-accepted at 93.8% primary precision. Spec rule where any flag sends the row to review: 26.6% auto-accepted at 93.5% primary precision." src="../figures/gate-light.png">
+</picture>
 
 The spec's flag rule removes two thirds of the volume from automation and buys nothing in precision. With flags demoted, 92 percent of opportunities would be auto-classified at 93.8 percent primary precision on the scored subset, and the queue would be dominated by genuine Jev-Qwen disagreements (723), which is where human attention belongs. The measured precision (0.938) is below the 0.967 the Jev-only curve promises at 0.94 because the gate is scored on "full" gold rows including some the cutoff analysis excluded; both numbers are reported.
 
@@ -623,7 +653,7 @@ In order, with the cost if wrong.
 
 ## 16. Reproducibility and artifacts
 
-This repository (branch `main`). Tests: `python3 -m pytest -q` → 49 passed. Secrets and endpoints come from environment variables (`.env.example`).
+This repository (branch `main`). Tests: `python3 -m pytest -q` → 52 passed. Secrets and endpoints come from environment variables (`.env.example`).
 
 | Artifact | Path |
 |---|---|
