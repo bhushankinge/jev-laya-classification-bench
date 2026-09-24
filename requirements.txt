@@ -1,0 +1,5 @@
+# Pipeline, evaluator, figures and tests. Laya runs in its own venv (LAYA_PYTHON) with laya==0.3.3 and CUDA torch.
+matplotlib>=3.8
+requests>=2.31
+psycopg2-binary>=2.9   # only pipeline/gold.py and the sample builder touch a database
+pytest>=7.4
