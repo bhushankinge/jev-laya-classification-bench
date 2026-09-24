@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this benchmark, its method or its results, please cite it as below."
+title: "jev-laya-classification-bench: Typed-decision models versus an LLM on 12,000 federal IT solicitations"
+type: software
+authors:
+  - family-names: Kinge
+    given-names: Bhushan
+version: 1.0.0
+date-released: 2026-09-24
+license: Apache-2.0
+repository-code: "https://github.com/bhushankinge/jev-laya-classification-bench"
+abstract: >-
+  A benchmark of typed-decision models (the Jev API, jev-1.13.0, and its 421M-parameter open-weights
+  sibling Laya) against Qwen3.5-35B-A3B on 12,000 real U.S. federal IT solicitations, graded against the
+  product types a reseller actually quoted. On 741 paired rows with quote gold, Jev reaches 91.9% primary-class
+  accuracy with ECE 0.049 and auto-accepts 86.5% of rows at a Wilson-bounded 95% precision; Qwen reaches 89.6%
+  and Laya 78.0%, neither reaching a 95% cutoff. Fulfillment mode (distributor SKU versus OEM-configured build)
+  stays at or below 71% for every model.
+keywords:
+  - text classification
+  - typed decisions
+  - calibration
+  - selective prediction
+  - LLM evaluation
+  - federal procurement
+  - benchmark

@@ -1,0 +1,21 @@
+# jev-laya-classification-bench
+
+> Benchmark of typed-decision models versus an LLM on a real classification job. Jev (TypeSafe System One API, jev-1.13.0), Laya (its 421M-parameter open-weights sibling, convaiinnovations/laya) and Qwen3.5-35B-A3B each labeled the same 12,000 U.S. federal IT solicitations (SEWP, GSA MAS, GSA 2GIT) with the same question schema. They were graded against the product types a reseller actually quoted. On 741 paired rows: Jev 91.9% primary-class accuracy (ECE 0.049, 86.5% auto-accepted at a Wilson-bounded 95% precision, cutoff 0.94); Qwen 89.6% (no 95% cutoff reachable); Laya 78.0% with shipped defaults (ECE 0.322). Nine Jev prompt variants landed within 0.7 points of each other. Fulfillment mode (distributor SKU vs OEM-configured build) stayed at or below 71% for every model. Jev labeled all 12,000 rows for $0.78 at list price, median latency 185 ms. Author: Bhushan Kinge. License: Apache-2.0.
+
+## Results
+- [README with figures](https://github.com/bhushankinge/jev-laya-classification-bench#results): headline table and five findings
+- [Full experiment report](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/docs/reports/2026-09-24-classification-experiments-report.md): data, methods, E0 to E7, Laya analysis, limitations
+- [Final metrics](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/results/e2-full/metrics.json): every E2 number, key by_source.<source>.paired
+- [Cost and latency](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/results/e5-cost.md)
+
+## Method
+- [Research design](https://github.com/bhushankinge/jev-laya-classification-bench/tree/main/docs/specs)
+- [Runbook with the pre-registered selection rule](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/pipeline/RUN.md)
+- [Evaluator](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/pipeline/evaluate.py): paired scoring, ECE, Wilson-bounded cutoffs, gate simulation
+
+## Related
+- [laya-cuda-bench](https://github.com/bhushankinge/laya-cuda-bench): companion GPU capacity study of Laya
+
+## Optional
+- [Citation](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/CITATION.cff)
+- [Figure generator](https://github.com/bhushankinge/jev-laya-classification-bench/blob/main/figures/make_figures.py)
