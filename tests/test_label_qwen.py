@@ -17,3 +17,11 @@ def test_concurrency_clamped_at_48(monkeypatch):
     spec = importlib.util.spec_from_file_location("qc_clamped", pathlib.Path("qwen_discovery/qwen_classify.py"))
     qc_clamped = importlib.util.module_from_spec(spec); spec.loader.exec_module(qc_clamped)
     assert qc_clamped.CONCURRENCY == 48
+
+
+def test_imports_without_endpoint_configured(monkeypatch):
+    """CI has no secrets: the endpoint is read when a request is sent, not at import."""
+    monkeypatch.delenv("QWEN_ENDPOINT", raising=False)
+    monkeypatch.delenv("PCAI_API_KEY", raising=False)
+    spec = importlib.util.spec_from_file_location("qc_noenv", pathlib.Path("qwen_discovery/qwen_classify.py"))
+    spec.loader.exec_module(importlib.util.module_from_spec(spec))

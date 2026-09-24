@@ -23,7 +23,6 @@ VEHICLES = {"SEWP": 6000, "GSA MAS": 3000, "GSA 2GIT": 3000}
 sys.path.insert(0, str(HERE.parent))
 from pipeline import common  # noqa: E402  (secrets and endpoints come from the environment)
 
-ENDPOINT = common.env("QWEN_ENDPOINT")   # OpenAI-compatible /v1/chat/completions URL
 MODEL = "Qwen/Qwen3.5-35B-A3B-FP8"
 CONCURRENCY = min(int(os.environ.get("CONC", "48")), 48)  # shared prod endpoint: hard ceiling
 
@@ -138,7 +137,7 @@ def prompt_for(r):
     return "\n\n".join(parts)
 
 
-_key = {"v": api_key(), "t": time.time()}
+_key = {"v": None, "t": time.time()}   # bearer token, fetched on first call so imports need no secrets
 _lock = threading.Lock()
 
 
@@ -147,10 +146,12 @@ def call(r, sess):
             "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt_for(r)}],
             "response_format": {"type": "json_schema", "json_schema": {"name": "rfq", "schema": SCHEMA, "strict": True}},
             "chat_template_kwargs": {"enable_thinking": False}}
+    if _key["v"] is None:
+        with _lock: _key["v"] = _key["v"] or api_key()
     err = "unauthorized"
     for attempt in range(4):
         try:
-            resp = sess.post(ENDPOINT, json=body, headers={"Authorization": f"Bearer {_key['v']}"}, timeout=180, verify=False)
+            resp = sess.post(common.env("QWEN_ENDPOINT"), json=body, headers={"Authorization": f"Bearer {_key['v']}"}, timeout=180, verify=False)
             if resp.status_code == 401:
                 with _lock: _key["v"] = api_key()
                 continue
