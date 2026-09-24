@@ -13,14 +13,17 @@ import json, os, random, re, sys, time, threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+import sys
 import psycopg2, psycopg2.extras, requests
 
 HERE = Path(__file__).resolve().parent
 SAMPLE = HERE / "sample.jsonl"
 LABELS = Path(os.environ.get("QWEN_LABELS", HERE / "labels.jsonl"))
 VEHICLES = {"SEWP": 6000, "GSA MAS": 3000, "GSA 2GIT": 3000}
-ENDPOINT = ("https://<qwen-endpoint>"
-            ".example.internal/v1/chat/completions")
+sys.path.insert(0, str(HERE.parent))
+from pipeline import common  # noqa: E402  (secrets and endpoints come from the environment)
+
+ENDPOINT = common.env("QWEN_ENDPOINT")   # OpenAI-compatible /v1/chat/completions URL
 MODEL = "Qwen/Qwen3.5-35B-A3B-FP8"
 CONCURRENCY = min(int(os.environ.get("CONC", "48")), 48)  # shared prod endpoint: hard ceiling
 
@@ -83,20 +86,11 @@ Return only JSON matching the schema."""
 
 
 def db():
-    t = Path("<credentials-file>").read_text()
-    row = next(l for l in t.splitlines() if "<db-row>" in l)
-    pw = re.search(r"Admin: \*\*<db-user> / ([^*]+)\*\*", row).group(1).strip()
-    c = psycopg2.connect(host="<db-host>", port=5432, dbname="<db-name>",
-                         user="<db-user>", password=pw, connect_timeout=8)
-    c.set_session(readonly=True, autocommit=True)
-    return c
+    return common.db()
 
 
 def api_key():
-    for line in Path("<ai-services-env>").read_text().splitlines():
-        if line.startswith("PCAI_API_KEY="):
-            return line.split("=", 1)[1].strip()
-    raise RuntimeError("PCAI_API_KEY missing")
+    return common.pcai_key()
 
 
 def build_sample():

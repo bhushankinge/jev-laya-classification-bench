@@ -1,6 +1,6 @@
 # Experiment runbook
 
-All commands from `<repo>`. Dates in file names are the day the file was built; never overwrite a gold file.
+All commands from the repo root; secrets per `.env.example`. Dates in file names are the day the file was built; never overwrite a gold file.
 
 ## E0 Sample and gold
 python3 qwen_discovery/qwen_classify.py 0      # builds qwen_discovery/sample.jsonl, labels nothing
@@ -14,17 +14,17 @@ The subset is drawn from the composition gold so every row can be scored, and ba
 python3 -m pipeline.label_jev --variant A --state S2 --verify        # 3 rows, prints raw answers; do this first
 for v in A B C; do for s in S1 S2 S3; do python3 -m pipeline.label_jev --variant $v --state $s \
    --ids-from gold/composition-<date>.jsonl --vehicle-balanced --limit 1000; done; done
-<bench-repo>/.venv/bin/python -m pipeline.label_laya --variant A --state S2 --verify
-<bench-repo>/.venv/bin/python -m pipeline.label_laya --variant A --state S2 \
+$LAYA_PYTHON -m pipeline.label_laya --variant A --state S2 --verify
+$LAYA_PYTHON -m pipeline.label_laya --variant A --state S2 \
    --ids-from gold/composition-<date>.jsonl --vehicle-balanced --limit 1000
-Laya rows: run under `<bench-repo>/.venv/bin/python`.
+Laya rows: run under the Laya venv's interpreter (`LAYA_PYTHON`, which has the `laya` package and CUDA torch).
 python3 -m pipeline.label_qwen 5                   # smoke, then:
 python3 -m pipeline.label_qwen 2>&1 | tee results/e5-qwen.log   # all 12,000 rows, v2 schema (~45 min at 48 concurrent)
 for v in A B C; do for s in S1 S2 S3; do python3 -m pipeline.evaluate --run e1-$v-$s --jev $v-$s --qwen v2 \
    --composition gold/composition-<date>.jsonl --fulfillment gold/fulfillment-<date>.jsonl; done; done
 Selection rule (one rule, in this order, all from metrics.json):
-1. highest `paired.primary_vs_quote_gold.accuracy` (the id set every source labeled);
-2. tie -> higher `paired.primary_vs_quote_gold.coverage_at_cutoff` (the Wilson-bounded cutoff_95; a null
+1. highest `by_source.jev.paired.primary_vs_quote_gold.accuracy` (the id set every source labeled);
+2. tie -> higher `by_source.jev.paired.primary_vs_quote_gold.coverage_at_cutoff` (the Wilson-bounded cutoff_95; a null
    cutoff counts as coverage 0);
 3. tie -> the cheaper state (S1 < S2 < S3).
 Then label all 12,000 rows with the winner for Jev and Laya (same command without --ids-from/--limit).
@@ -49,7 +49,7 @@ Covered by fulfillment_vs_quote_gold and vs_human_gold.fulfillment_accuracy in e
 Jev: mean `usage.input_tokens` × $0.042 / 1e6 per opportunity; p50/p95 of latency_ms from labels/jev/<win>.jsonl.
 Qwen: `usage.total_tokens` summed from labels/qwen/v2.jsonl and wall time from results/e5-qwen.log
 (run the labeler with `2>&1 | tee results/e5-qwen.log`); GPU seconds = wall time × 1 GPU.
-Laya: rows/s from label_laya stderr; $/M decisions from ~/<bench-repo> results (bench report).
+Laya: rows/s from label_laya stderr; $/M decisions from the companion bench repository's report.
 Record all three in results/e5-cost.md.
 
 ## E6 Regression

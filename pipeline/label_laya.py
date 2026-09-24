@@ -1,13 +1,13 @@
 """Label sample rows with Laya locally. Run with the bench venv:
 
-    <bench-repo>/.venv/bin/python -m pipeline.label_laya --variant A --state S2 --verify
-    <bench-repo>/.venv/bin/python -m pipeline.label_laya --variant A --state S2
+    $LAYA_PYTHON -m pipeline.label_laya --variant A --state S2 --verify
+    $LAYA_PYTHON -m pipeline.label_laya --variant A --state S2
 """
 import argparse, json, sys, time
 from pathlib import Path
 from . import common, bundle
 
-MODEL_DIR = Path("<bench-repo>/models/laya")
+MODEL_DIR = Path(common.env("LAYA_MODEL_DIR"))   # local copy of convaiinnovations/laya
 
 
 def run(variant, state_variant, limit=None, verify=False, ids_from=None, balanced=False):

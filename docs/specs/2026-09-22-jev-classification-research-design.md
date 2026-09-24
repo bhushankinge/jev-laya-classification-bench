@@ -1,8 +1,8 @@
 # Jev classification research pipeline — design
 
 Date: 2026-09-22. Status: approved design (chat approval 2026-09-22). Owner: research lead.
-Companion documents: `Federal_Opportunity_Classification_Report.pdf` (Section 1 defines the class set),
-`qwen_discovery/QWEN_FINDINGS.md` (text-grounded distributions), `~/<bench-repo>` (Laya/Jev harness).
+Companion documents: an internal taxonomy report (Section 1 defines the class set; not published),
+`qwen_discovery/QWEN_FINDINGS.md` (text-grounded distributions), the companion Laya CUDA bench repository (Laya/Jev harness).
 
 ## 1. Goal
 
@@ -43,10 +43,9 @@ Fulfillment mode definitions:
 - **Jev** (`jev-latest`, `https://api.typesafe.ai/v1/systemone`): first pass. One request per opportunity,
   one state text, a bundle of typed questions (Section 4). Returns a top choice, a probability per option and a
   confidence per question. Measured: p50 ≈ 150 ms from Arizona, 1,500 req/min accepted, $0.042 per million input
-  tokens (state counted once per request). Key lives in `~/<bench-repo>/.env` as `JEV_API_KEY`; never in this folder.
-- **Laya** (`convaiinnovations/laya` pinned per `~/<bench-repo>/manifest.json`): identical request schema,
-  run locally on the RTX 2000 Ada (8 GB) via the bench harness (`harness/sequences.py`, `harness/predict.py`,
-  eager FP16). Answers the "pay Jev or self-host" question in the same units.
+  tokens (state counted once per request). Key read from the `JEV_API_KEY` environment variable; never in this folder.
+- **Laya** (`convaiinnovations/laya`, pinned in the companion bench repository's `manifest.json`): identical request schema,
+  run locally on the RTX 2000 Ada (8 GB) via the `laya` package (eager FP16). Answers the "pay Jev or self-host" question in the same units.
 - **Qwen3.5-35B-A3B-FP8** on PCAI: second opinion and reference labeler. The labeler already exists
   (`qwen_discovery/qwen_classify.py`); its schema is extended with `fulfillment_mode` and the three flags.
 - **Quotes** (the CRM database, read-only): gold for top-level composition (rep-selected Product Type on quote lines) and for
@@ -78,7 +77,7 @@ the Section 2 schema by a fixed function (`kind → subclass`, primary component
 ## 5. Gold sets (E0)
 
 1. **Composition gold** (top level only). For every opportunity with at least one typed quote line, the latest typed
-   quote's set of Product Types mapped to top-level classes (the mapping already in `collect_report_data.py`).
+   quote's set of Product Types mapped to top-level classes (fixed mapping in `gold.py`).
    Expected size: SEWP ≈ 7,700, GSA MAS ≈ 340, GSA 2GIT ≈ 330.
 2. **Fulfillment gold**. Per quoted opportunity, over the hardware-typed lines of its latest typed quote
    (the same quote the composition gold describes; ruling 2026-09-22: superseded quotes and non-hardware
@@ -125,22 +124,22 @@ decision expects ≥ 70% on SEWP.
 
 | Unit | Does | Depends on |
 |---|---|---|
-| `gold.py` | builds the composition and fulfillment gold from the CRM database read-only; catalogues configurator fingerprints | psycopg2, credential pointer file |
-| `label_jev.py` | runs a question variant × state variant over sample rows; resumable JSONL; logs tokens and latency | typesafe-sdk or raw HTTP, key from `~/<bench-repo>/.env` |
-| `label_laya.py` | same bundle through the bench harness on the local GPU | `~/<bench-repo>` venv and weights |
-| `label_qwen.py` | the existing labeler, schema extended with fulfillment and flags | PCAI endpoint, key from ai-services `.env` |
+| `gold.py` | builds the composition and fulfillment gold from the CRM database read-only; catalogues configurator fingerprints | psycopg2, `CRM_DB_DSN` |
+| `label_jev.py` | runs a question variant × state variant over sample rows; resumable JSONL; logs tokens and latency | raw HTTP, `JEV_API_KEY` |
+| `label_laya.py` | same bundle through the `laya` package on the local GPU | Laya venv and weights (`LAYA_MODEL_DIR`) |
+| `label_qwen.py` | the existing labeler, schema extended with fulfillment and flags | `QWEN_ENDPOINT`, `PCAI_API_KEY` |
 | `mapping.py` | maps each labeler's raw output to the Section 2 schema | `schema.py`, `bundle.py` |
 | `evaluate.py` | metrics, calibration, threshold curves, agreement matrix, cost; writes `results/<run>/metrics.json` | gold + labels |
 | `review_queue.py` | pushes rows to the CRM review API and pulls verdicts back into `gold/human-<date>.jsonl` | CRM backend API, service token |
 | `report.py` | HTML/PDF results report in the style of the existing builder | matplotlib |
 
-Conventions: read-only the CRM database sessions; credentials read at runtime from protected paths; no solicitation text in
+Conventions: read-only database sessions; credentials read at runtime from the environment; no solicitation text in
 committed outputs beyond the existing sample; every run writes `results/<run>/env.json` with model names, variant
 ids, sample hash and timestamps.
 
 ## 8. Classification Review page (CRM feature)
 
-Purpose: human adjudication now, production review queue later. Bounded feature in <crm-repo>.
+Purpose: human adjudication now, production review queue later. Bounded feature in the CRM (built in that repository, not here).
 
 - **Backend** (`backend/src/modules/classification-reviews/`): routes, controller, service, repository, validators,
   following the `teams` module layout. Endpoints: list queue (filters: status, vehicle, reason), get one (returns
@@ -157,8 +156,8 @@ Purpose: human adjudication now, production review queue later. Bounded feature 
 - **Frontend** (`frontend/src/features/classificationReview/`): queue table, detail view with the text bundle on
   the left, proposals side by side, an editable verdict form pre-filled from the highest-confidence proposal,
   buttons Confirm / Correct / Skip, keyboard-first. Registered under the app routes behind the permission.
-- **Deployment**: lives in prod (the test DB is reset from prod weekly and would lose verdicts). Deploy via the
-  deploy-crm-prod skill. Research scripts write only through the API, so no direct prod SQL is needed for the study.
+- **Deployment**: verdicts must persist, so the page lives on a database that is not periodically reset. Research scripts
+  write only through the API.
 - Human budget for the study: ≈ 1,100 rows (600 gold, 300 disagreements, 200 fulfillment) ≈ 18 reviewer-hours.
 
 ## 9. Production target (informs the follow-up plan, not built here)
@@ -168,7 +167,7 @@ short poll on `created_at`), that builds the state text, calls Jev, applies the 
 writes one row per component with subclass, lifecycle, domain, fulfillment mode, source, confidence and evidence
 span (new `opportunity_components` table plus flags on the opportunity), sends gated rows to `classification_reviews`,
 and evaluates an automation-trigger table (`classification_triggers`: condition over labels → action). Laya replaces
-Jev if E5 shows equal accuracy at lower cost. Load: ≈ 163 opportunities per day for SEWP + GSA, 72 more for ITES-4H.
+Jev if E5 shows equal accuracy at lower cost.
 
 Initial triggers:
 
@@ -198,11 +197,12 @@ Initial triggers:
 
 ## 11. Risks and mitigations
 
-- **Jev state-length limit unknown**: measure the largest accepted state in E1 and cap below it; S3 may need trimming.
+- **Jev state-length limit**: documented at 64k tokens per request (state plus all questions) and 32k for the state plus the
+  longest single question (TypeSafe Jev model docs, confirmed 2026-09-23). The ~600-token E1 cap is a cost and comparability
+  choice, not a Jev constraint; richer attachment text is a design decision after E1, not a limit question.
 - **Quote gold is biased toward quoted (won-interest) opportunities**: top-level only; subclass and lifecycle rely on
   human gold; state this in every report.
 - **Fulfillment proxy rules may be wrong**: validated on 200 human rows before use; HPE/Dell fingerprints may be absent
   (then those OEMs rely on human gold).
 - **Prod endpoint load**: Qwen batches run at ≤ 48 concurrent; Jev at ≤ 10 req/s; both off-hours where possible.
-- **Review UI touches prod**: schema change through prisma-migration, deploy through deploy-crm-prod, verify-live after.
-- **Credentials**: Jev key, PCAI key and DB password stay in their protected files; nothing in this folder.
+- **Credentials**: Jev key, Qwen endpoint token and DB DSN come from environment variables; nothing in this folder.

@@ -1,4 +1,4 @@
-"""Gold sets from quotes (spec Section 5). Read-only the CRM database. Ids and labels only, no text."""
+"""Gold sets from quotes (spec Section 5). Read-only CRM database (CRM_DB_DSN). Ids and labels only, no text."""
 import argparse, json, re, sys
 from collections import Counter
 from datetime import date

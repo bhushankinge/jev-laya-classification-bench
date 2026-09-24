@@ -12,3 +12,10 @@ results/**/*.png
 results/**/report.html
 classification_report_data.json
 results/**/*.log
+
+# never commit secrets or company records
+.env
+gold/
+qwen_discovery/labels.jsonl
+Federal_Opportunity_Classification_Report.html
+docs/plans/
