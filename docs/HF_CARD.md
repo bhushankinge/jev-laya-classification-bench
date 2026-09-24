@@ -38,7 +38,7 @@ Only aggregate metrics: one `metrics.json` and `env.json` per run (`e1-*` for th
 
 ## Laya with shipped defaults
 
-Laya ran single-row with default config. Presence questions over-fire, accuracy drops before the 512-token window fills, and the sequence packer truncates class definitions to 25 tokens. Six testable hypotheses are listed in the [README](https://github.com/bhushankinge/jev-laya-classification-bench#laya-reproducible-issues-and-hypotheses). Replications are welcome.
+Laya ran single-row with default config. Presence questions over-fire, accuracy drops before the 512-token window fills, and the longest 13% of states are cut at the 512-token window (the class definitions themselves fit the head budget; an earlier version of this card said otherwise). Six testable hypotheses are listed in the [README](https://github.com/bhushankinge/jev-laya-classification-bench#laya-reproducible-issues-and-hypotheses). Replications are welcome.
 
 ## Citation
 

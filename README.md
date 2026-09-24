@@ -101,16 +101,16 @@ Observed, with evidence in [report section 9.4](docs/reports/2026-09-24-classifi
 
 - **Presence questions over-fire.** Laya emits 4.05 components per row against 1.95 for Jev; its `rfi_market_research` and `text_insufficient` flags fire on 63% and 71% of rows (Jev 13% and 15%), where the discovery run found true RFI rates of 2% to 3%. Its `brand_name_only` rate (49%) is in line with the discovery run.
 - **Accuracy drops before the window fills.** 81.5% on states under 600 characters (n=519), 65.8% at 600 to 1,200 characters (n=117, roughly 150 to 300 tokens), inside the 512-token window. Longer states recover partly (72.9%, n=59; 74.0%, n=50); Jev and Qwen show no comparable drop.
-- **Class definitions are silently truncated.** The sequence packer caps the question head at 192 tokens. With seven options, each class definition is cut to 25 tokens, which drops the text that separates hardware from software.
+- **The state is truncated for the longest rows; the class definitions are not.** Measured with the Laya tokenizer (`python -m pipeline.head_budget`): the seven options of `primary_class` take 147 tokens with their markers against the 176 available (159 with the 12-token instruction), so no definition or instruction was cut (an earlier version of this README claimed 25-token cuts; that was an estimate and it was wrong). The head leaves 348 tokens, about 1,400 characters, for the state, so roughly the longest 13% of S2 states are cut for the class question. The 600 to 1,200-character bucket where accuracy first drops is never cut.
 
 Hypotheses, none tested yet:
 
-1. Raise `head_max_len` or shorten criteria so definitions survive; measure on the same 741 rows.
-2. Warn when `build_sequence` truncates options or instructions.
+1. Drop the line-item block for states over 1,400 characters so the class question sees the whole notice; measure on the same 741 rows.
+2. Record per-question state truncation (upstream PR #181 adds the flag) and re-bucket accuracy by cut vs whole instead of by character length.
 3. Run the `laya-typed-decisions` and `laya-multilingual` checkpoints on the same bundle.
 4. Fit per-question noul thresholds or a temperature on a held-out slice instead of 0.5.
-5. Ask `primary_class` alone with full definitions, then the rest.
-6. Record `n_tokens` per row and re-bucket accuracy by tokens actually kept.
+5. Put the description first in the state and the vehicle and title lines last; test whether the drop at 150 to 300 tokens follows position rather than length.
+6. Control: send the class labels with no definitions. If accuracy is unchanged, the definitions are not being used.
 
 Replications and pull requests are welcome; please open an issue first.
 

@@ -38,7 +38,7 @@ Findings that matter:
 1. **Jev beats the 35B LLM by 2.3 points on the top-level class and is the only source whose confidence supports an auto-accept gate.** At a 0.94 cutoff it accepts 86.5 percent of rows at a Wilson-bounded 95 percent precision (observed 96.7 percent).
 2. **All nine Jev question and state-text variants land within five rows of each other (0.912 to 0.919 on 741).** Adding line items, adding a 1,500-character attachment excerpt, hierarchical questions, or a 12-way subclass choice changed nothing measurable. The cheapest adequate variant (A-S2) won on the pre-registered tie-break.
 3. **Fulfillment mode is the weak spot for every model:** 0.65 (Jev), 0.71 (Qwen), 0.46 (Laya) against quote gold, with configured-build precision 0.25 to 0.36. The 90 percent target is far away. This is the question whose answer usually lives inside a BOM or configurator quote in an attachment, not in the notice text.
-4. **Laya, as shipped, is not competitive on this task at 0.78,** and its calibration is poor (ECE 0.32, median primary confidence 0.41). Section 9 analyzes why: over-firing presence questions (4.05 components per row vs 1.95 for Jev), flags firing on 63 to 71 percent of rows, length sensitivity that begins well before the 512-token window is full, and a head-budget rule in the sequence packer that truncates the class definitions the questions rely on. These are the concrete, reproducible items for a community contribution.
+4. **Laya, as shipped, is not competitive on this task at 0.78,** and its calibration is poor (ECE 0.32, median primary confidence 0.41). Section 9 analyzes why: over-firing presence questions (4.05 components per row vs 1.95 for Jev), flags firing on 63 to 71 percent of rows, length sensitivity that begins well before the 512-token window is full, and state truncation for the longest rows (the class definitions themselves fit the head budget; an earlier draft of this report said otherwise). These are the concrete, reproducible items for a community contribution.
 5. **The `brand_name_only` flag fires on 54 percent of rows (Jev) and 39 percent (Qwen).** The spec's "always queue when any flag is true" rule would cut auto-accept coverage from 92 percent to 27 percent for no precision gain. That flag should become an attribute, not a queue trigger.
 6. **Cost:** Jev labeled all 12,000 opportunities for $0.78 at list price ($0.042 per million input tokens), median latency 185 ms from Arizona. Laya ran at 2.9 rows per second single-row on a laptop GPU. Qwen took about 80 minutes of a shared GPU cluster at 16 concurrent requests.
 
@@ -507,9 +507,9 @@ Laya's mean noul sits between 0.30 and 0.63 on every subclass; Jev's rare subcla
 
 Applied to this bundle:
 
-- `primary_class` has 7 options with definitions of roughly 20 to 30 tokens each plus a mask token: 7 × up to 49 exceeds 192, so each definition is cut to **25 tokens** and the instruction sentence to as few as 8 tokens. The definitions were written to disambiguate exactly the errors Laya makes (hardware vs software).
-- `fulfillment_mode` has 4 options of 30 to 45 tokens: cut to 44 tokens each, instruction to about 16.
-- State room for these two questions is about 317 tokens (roughly 1,250 characters), so the longest 10 to 15 percent of S2 rows are truncated for them; noul questions (two short options) leave about 480 tokens of room.
+- `primary_class` has 7 options whose definitions are 14 to 28 tokens each plus a mask token, 147 tokens with their markers against the 176 available (192 minus the 16 reserved for the instruction), 159 with the 12-token instruction, so **no definition and no instruction was cut**. An earlier version of this report stated that each definition was cut to 25 tokens; that figure was an upper-bound estimate (7 × 49) rather than a measurement, and it was wrong. Measured with `laya/common.py::build_sequence` at upstream `970dc8c` and the pinned tokenizer; `python -m pipeline.head_budget` reproduces it.
+- `fulfillment_mode` has 4 options of 8 to 48 tokens, 110 with markers, also uncut.
+- State room: 348 tokens (about 1,400 characters) for `primary_class`, 385 for `fulfillment_mode`, 457 for the nouls. From the length buckets above, about 13 percent of S2 states exceed 1,400 characters and are cut for the class question; the 600 to 1,200-character bucket where accuracy first drops is never cut, so the length sensitivity is a property of the model, not of truncation.
 - Laya's harness reports how many tokens it actually used (`n_tokens`); the labeler did not record it, so exact truncation counts are not available from this run.
 
 **Cost comparison in tokens.** Laya feeds the state once per question (19 times per row); Jev counts the state once per request. Any tokens-per-decision comparison must state this.
@@ -518,12 +518,12 @@ Applied to this bundle:
 
 **Hypotheses worth testing (none tested yet):**
 
-1. Raise `head_max_len` (config `head_max_len` in `rl_agent_config.json`) or shorten criteria so definitions survive; measure primary accuracy on the 741 rows.
-2. Emit a warning when `build_sequence` truncates options or the instruction below their full length; today it is silent.
+1. Drop the line-item block for states over 1,400 characters so the class question sees the whole notice; measure primary accuracy on the 741 rows.
+2. Record per-question state truncation (upstream PR #181 adds the flag) and re-bucket accuracy by cut vs whole instead of by character length.
 3. Try `laya-typed-decisions` and `laya-multilingual` checkpoints on the same bundle (downloaded and pinned in the bench repo, never run on this task).
 4. Fit a per-question threshold for the nouls (or a temperature) on a held-out slice instead of 0.5; the over-firing pattern looks like a calibration offset.
-5. Split the bundle: ask `primary_class` alone with full definitions, then the rest; measure whether the head budget was the constraint.
-6. Record `n_tokens` per row and re-bucket accuracy by actual state tokens kept.
+5. Put the description first in the state and the vehicle and title lines last; test whether the drop at 150 to 300 tokens follows position rather than length.
+6. Control: send the class labels with no definitions. If accuracy is unchanged, the definitions are not being used.
 
 ### 9.5 Jev vs Qwen agreement over 11,931 rows
 
@@ -698,8 +698,8 @@ Companion bench repository (published separately): its `manifest.json` pins upst
 ### 17.1 Candidate posts and PRs
 
 1. **"Laya vs Jev vs a 35B LLM on 12,000 real procurement notices"** (post). Sections 1, 8, 9.1 to 9.4, 10. The honest framing: Jev wins, Laya as shipped loses by 14 points and mis-calibrates, here is exactly where and why, here is what to try.
-2. **Laya PR: warn (or raise) when `build_sequence` truncates options or instructions.** Today a 7-option choice with 30-token criteria silently keeps 25 tokens per option and as few as 8 instruction tokens. A one-line warning and a documented `head_max_len` recommendation would have surfaced the issue before 12,000 rows ran. Evidence: Section 9.4 packing analysis.
-3. **Laya PR or issue: expose `n_tokens` and truncation counts in `predict` output** so users can bucket accuracy by kept tokens.
+2. **Laya PR #181 review: per-question state-truncation flag.** This run could not count truncated rows because nothing in the output says the state was cut; #181 adds exactly that. Offer the length-bucket table as the motivating case.
+3. **Laya issue: length sensitivity below truncation.** Primary accuracy falls 16 points between states under 600 characters and 600 to 1,200 characters with the state whole and the head uncut; Jev and Qwen are flat. Evidence: Section 9.4.
 4. **Laya issue: noul calibration on presence-style questions.** Twelve `has_*` nouls average 0.30 to 0.63 with flags firing on 63 to 71 percent of rows where the true rate is 2 to 15 percent. Include the table in Section 9.4 and the Jev comparison as a reference point.
 5. **laya-mlx / laya BENCHMARKS PR: CUDA section** from Section 13 (already planned in the bench repo).
 6. **A follow-up experiment note** once hypotheses 1 to 6 in Section 9.4 are tested, whichever way they come out.
@@ -712,7 +712,7 @@ Companion bench repository (published separately): its `manifest.json` pins upst
 - The company name, daily volumes and the internal taxonomy report and its build scripts.
 - Implementation plans and CRM feature internals beyond the description in Section 12.
 
-Everything else is as measured: schema, question texts and definitions, state-text format, all accuracy, calibration, curve, confusion, length-bucket and vehicle tables, the Laya packing analysis, Jev list pricing and documented limits, the bench headline table, and the reproduction commands.
+Everything else is as measured: schema, question texts and definitions, state-text format, all accuracy, calibration, curve, confusion, length-bucket and vehicle tables, the Laya head-budget measurement, Jev list pricing and documented limits, the bench headline table, and the reproduction commands.
 
 ---
 
