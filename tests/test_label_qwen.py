@@ -25,3 +25,15 @@ def test_imports_without_endpoint_configured(monkeypatch):
     monkeypatch.delenv("PCAI_API_KEY", raising=False)
     spec = importlib.util.spec_from_file_location("qc_noenv", pathlib.Path("qwen_discovery/qwen_classify.py"))
     spec.loader.exec_module(importlib.util.module_from_spec(spec))
+
+
+def test_missing_endpoint_fails_fast_instead_of_retrying(monkeypatch):
+    """An unconfigured endpoint is a setup error: raise before the retry loop, never sleep through retries."""
+    import pytest
+    monkeypatch.setenv("PCAI_API_KEY", "x")
+    spec = importlib.util.spec_from_file_location("qc_fast", pathlib.Path("qwen_discovery/qwen_classify.py"))
+    qc_fast = importlib.util.module_from_spec(spec); spec.loader.exec_module(qc_fast)
+    monkeypatch.delenv("QWEN_ENDPOINT", raising=False)
+    monkeypatch.setattr(qc_fast.time, "sleep", lambda s: pytest.fail("retried a configuration error"))
+    with pytest.raises(RuntimeError, match="QWEN_ENDPOINT"):
+        qc_fast.call({"id": 1, "vehicle": "SEWP", "title": "t", "description": "d"}, sess=None)
